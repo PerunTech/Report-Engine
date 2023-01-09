@@ -1,0 +1,1 @@
+window.server='http://192.168.9.73:9090/services'
