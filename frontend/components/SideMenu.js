@@ -3,6 +3,7 @@ import {
     connect,
     elements,
     axios,
+    Loading
 } from "perun-core";
 import style from "./../assets/ReportEngine.module.css"
 import { icons } from '../assets/svgHolder';
@@ -13,10 +14,13 @@ const { ReactBootstrap } = elements;
 const SideMenu = (props) => {
     const [tables, setTables] = useState([])
     const [childFields, setChildFields] = useState([])
+    const [loading, setLoading] = useState(false)
     useEffect(() => {
+        setLoading(true)
         axios.get(`${window.server}/ReactElements/getTableData/${props.svSession}/SVAROG_TABLES/100000`).then((res) => {
             res.data.forEach(data => {
                 data.opened = false;
+                setLoading(false)
             })
             setTables(res.data)
         })
@@ -43,11 +47,12 @@ const SideMenu = (props) => {
         } else {
             tempArr.forEach(object => {
                 if (object['SVAROG_TABLES.OBJECT_ID'] == table['SVAROG_TABLES.OBJECT_ID']) {
-
+                    setLoading(true)
                     axios.get(`${window.server}/ReactElements/getTableFieldList/${props.svSession}/${table['SVAROG_TABLES.TABLE_NAME']}`).then((res) => {
                         object.childList = res.data
                         object.opened = true
                         setTables(tempArr)
+                        setLoading(false)
                     })
                 }
             })
@@ -68,6 +73,7 @@ const SideMenu = (props) => {
 
     return (
         <>
+            {loading && <Loading />}
             {generateSideMenu()}
         </>
     );

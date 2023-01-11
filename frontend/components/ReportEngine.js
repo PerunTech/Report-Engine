@@ -11,16 +11,17 @@ const ReportEngine = () => {
         e.stopPropagation()
         let tempArr = [...selectedFields]
         tempArr.push(field)
-        setSelectedFields(tempArr)
+        let uniqueObjArray = [...new Map(tempArr.map((item) => [item["key"], item])).values()];
+        setSelectedFields(uniqueObjArray)
     }
     return (
         <div className={style['report-engine-main-container']}>
             <div className={style['side-menu-container']}>
                 <SideMenu handleFieldClick={handleFieldClick} />
             </div>
-            <div className={style['main-content-container']}>
+            {selectedFields.length > 0 && <div className={style['main-content-container']}>
                 <MainContent selectedFields={selectedFields} />
-            </div>
+            </div>}
         </div>
     )
 }
