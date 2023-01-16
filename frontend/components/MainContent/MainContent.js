@@ -3,6 +3,7 @@ import {
     connect
 } from "perun-core";
 import style from "./../../assets/ReportEngine.module.css"
+import { icons } from "../../assets/svgHolder";
 const { useEffect, useState } = React
 let globalArr = []
 const MainContent = (props) => {
@@ -18,7 +19,7 @@ const MainContent = (props) => {
             globalArr = []
         }
     }, [])
-
+//generates  the table names and creates a basic clone array of objects for the formData
     const generateMainContentOne = () => {
         let tempArr = globalArr
         let content = (<div className={style['main-field-container']}>
@@ -33,19 +34,18 @@ const MainContent = (props) => {
             })}
         </div>)
         setMainContnetOne(content)
-        generateMainContentThree()
-        generateMainContentTwo()
         tempArr = tempArr.reverse()
         let uniqueObjArray = [...new Map(tempArr.map((item) => [item["name"], item])).values()];
         globalArr = uniqueObjArray
         globalArr = globalArr.reverse()
+        generateMainContentThree()
+        generateMainContentTwo()
     }
-
-
+//generates the dropdown
     const generateMainContentTwo = () => {
         let content = (<div className={style['main-field-container']}>
-            {props.selectedFields.map(field => {
-                return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'dd')} id={field.key}>
+            {globalArr.map(field => {
+                return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'dd')} id={field.name} key={field.name}>
                     <option value={'equal'}>Equal</option>
                     <option value={'withlike'}>WithLike</option>
                     <option value={'endswith'}>Ends with</option>
@@ -55,16 +55,19 @@ const MainContent = (props) => {
         </div>)
         setMainContnetTwo(content)
     }
-
-
+//Used to generate the inputs 
     const generateMainContentThree = () => {
         let content = (<div className={style['main-field-container']}>
-            {props.selectedFields.map(field => {
-                return <input style={{ 'background': 'none' }} className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'input')} id={field.key} type='string' />
+            {globalArr.map(field => {
+                return (<div className={style['input-container']}><input value={field.input && field.input} style={{ 'background': 'none' }} className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'input')} key={field.name} id={field.name} type='string'/> <span onClick={()=>{
+                    props.removeFileClick(field)
+                    innerRemoveFunc(field)
+                }}>{icons.delete}</span> </div> )
             })}
         </div>)
         setMainContnetThree(content)
     }
+//basic onchange function to handle input/select changes
     const onChange = (e, inputType) => {
         let tempArr = globalArr
         tempArr.forEach(field => {
@@ -80,6 +83,14 @@ const MainContent = (props) => {
         })
         globalArr = tempArr
     }
+//
+const innerRemoveFunc=(file)=>{
+    globalArr.forEach((field,i)=>{
+        if(field.name===file.name){
+           globalArr.splice(i,1)
+        }
+    })
+  }
     return (
         <>
 
