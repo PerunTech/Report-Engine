@@ -14,13 +14,24 @@ const ReportEngine = () => {
         let uniqueObjArray = [...new Map(tempArr.map((item) => [item["key"], item])).values()];
         setSelectedFields(uniqueObjArray)
     }
+
+    const removeFileClick=(file)=>{
+let tempArr = [...selectedFields]
+tempArr.forEach((field,i)=>{
+    if(field.key===file.name){
+        tempArr.splice(i,1)
+    }
+})
+setSelectedFields(tempArr)
+    }
+
     return (
         <div className={style['report-engine-main-container']}>
             <div className={style['side-menu-container']}>
                 <SideMenu handleFieldClick={handleFieldClick} />
             </div>
             {selectedFields.length > 0 && <div className={style['main-content-container']}>
-                <MainContent selectedFields={selectedFields} />
+                <MainContent selectedFields={selectedFields}  removeFileClick={removeFileClick}/>
             </div>}
         </div>
     )
