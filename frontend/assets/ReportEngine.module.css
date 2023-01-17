@@ -59,6 +59,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+
 }
 
 .mid-content-container {
@@ -112,13 +113,27 @@
     width: 100%;
 }
 
-.input-container{
+.input-container {
     display: flex;
     align-items: center;
 }
 
-.input-container>span{
+.input-container>span {
     margin-top: 8px;
     margin-left: 20px;
     cursor: pointer;
+}
+
+.mid-content-btn-holder {
+    border-radius: 7px;
+    box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;
+    background: white;
+    width: 98%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.btn-width {
+    width: 500px;
 }

@@ -19,7 +19,7 @@ const MainContent = (props) => {
             globalArr = []
         }
     }, [])
-//generates  the table names and creates a basic clone array of objects for the formData
+    //generates  the table names and creates a basic clone array of objects for the formData
     const generateMainContentOne = () => {
         let tempArr = globalArr
         let content = (<div className={style['main-field-container']}>
@@ -41,7 +41,7 @@ const MainContent = (props) => {
         generateMainContentThree()
         generateMainContentTwo()
     }
-//generates the dropdown
+    //generates the dropdown
     const generateMainContentTwo = () => {
         let content = (<div className={style['main-field-container']}>
             {globalArr.map(field => {
@@ -55,19 +55,19 @@ const MainContent = (props) => {
         </div>)
         setMainContnetTwo(content)
     }
-//Used to generate the inputs 
+    //Used to generate the inputs 
     const generateMainContentThree = () => {
         let content = (<div className={style['main-field-container']}>
             {globalArr.map(field => {
-                return (<div className={style['input-container']}><input value={field.input && field.input} style={{ 'background': 'none' }} className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'input')} key={field.name} id={field.name} type='string'/> <span onClick={()=>{
+                return (<div className={style['input-container']}><input value={field.input && field.input} style={{ 'background': 'none' }} className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'input')} key={field.name} id={field.name} type='string' /> <span onClick={() => {
                     props.removeFileClick(field)
                     innerRemoveFunc(field)
-                }}>{icons.delete}</span> </div> )
+                }}>{icons.delete}</span> </div>)
             })}
         </div>)
         setMainContnetThree(content)
     }
-//basic onchange function to handle input/select changes
+    //basic onchange function to handle input/select changes
     const onChange = (e, inputType) => {
         let tempArr = globalArr
         tempArr.forEach(field => {
@@ -83,14 +83,14 @@ const MainContent = (props) => {
         })
         globalArr = tempArr
     }
-//
-const innerRemoveFunc=(file)=>{
-    globalArr.forEach((field,i)=>{
-        if(field.name===file.name){
-           globalArr.splice(i,1)
-        }
-    })
-  }
+    //
+    const innerRemoveFunc = (file) => {
+        globalArr.forEach((field, i) => {
+            if (field.name === file.name) {
+                globalArr.splice(i, 1)
+            }
+        })
+    }
     return (
         <>
 
@@ -100,8 +100,8 @@ const innerRemoveFunc=(file)=>{
                 <div className={style['mid-content']}>{mainContentTwo}</div>
                 <div className={style['mid-content']}>{mainContentThree}</div>
             </div>
-            <div>
-                <button className={`btn-success btn_save_form`} onClick={() => { console.log(globalArr) }}>Generate Report</button>
+            <div className={style['mid-content-btn-holder']}>
+                <button className={`btn-success btn_save_form ${style['btn-width']}`} onClick={() => { console.log(globalArr) }}>Generate Report</button>
             </div>
 
         </>
