@@ -60,10 +60,10 @@
 							A bundle that provides services for report-engine
 						</Bundle-Description>
 						<Bundle-Activator>
-							com.prtech.iacs_sap.Activator
+							com.prtech.report_engine.Activator
 						</Bundle-Activator>
 						<Export-Package>
-							com.prtech.iacs_sap;com.prtech.iacs_sap_bl
+							com.prtech.report_engine
 						</Export-Package>
 						<Import-Package>
 							com.eclipsesource.jaxrs.publisher;version=!,*
