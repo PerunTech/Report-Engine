@@ -43,7 +43,7 @@ public class Activator implements BundleActivator {
 	 * The context path on the http server under which the static content from
 	 * the /www folder inside the bundle will be served
 	 */
-	static final String httpContextPath = "/report-egnine";
+	static final String httpContextPath = "/report-engine";
 
 	/**
 	 * Directory inside the bundle which will be served at the context path
