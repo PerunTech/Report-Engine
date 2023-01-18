@@ -11,12 +11,12 @@ import com.prtech.svarog_interfaces.ISvCore;
 public class PerunPluginInfo implements IPerunPlugin {
 
 	static final String confPath = "configuration";
-	static final String context = "report-egnine";
+	static final String context = "report-engine";
 
 	@Override
 	public int getVersion() {
 		// TODO Auto-generated method stub
-		return 1;
+		return 2;
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class PerunPluginInfo implements IPerunPlugin {
 
 	@Override
 	public String getJsPluginUrl() {
-		return "report-egnine.js";
+		return "report-engine.js";
 	}
 
 	@Override
