@@ -12,6 +12,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<build>
+		<sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>
 				<directory>${project.basedir}</directory>
