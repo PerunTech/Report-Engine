@@ -32,7 +32,7 @@ public class PerunPluginInfo implements IPerunPlugin {
 
 	@Override
 	public String getIconPath() {
-		return "/perun-assets/img/access_cards/ipardBp.jpg";
+		return "/perun-assets/img/access_cards/report-engine.jpg";
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class PerunPluginInfo implements IPerunPlugin {
 	@Override
 	public int getSortOrder() {
 		// TODO Auto-generated method stub
-		return 14;
+		return 16;
 	}
 
 	@Override

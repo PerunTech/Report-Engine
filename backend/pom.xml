@@ -18,8 +18,6 @@
 				<includes>
 					<include>labels/*</include>
 					<include>www/**/*.*</include>
-					<include>configuration/*</include>
-					<include>permission-configuration/*</include>
 				</includes>
 			</resource>
 		</resources>
