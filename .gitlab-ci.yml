@@ -17,14 +17,14 @@ after_script:
   - git stash
   - git pull origin $CI_BUILD_REF_NAME
 
-1_npm_install_test_build:
+1_pnpm_install_test_build:
   stage: 1_linter
   script:
     - pwd
     - git reset --hard HEAD
     - rm -rf node_modules
-    - npm install
-    - npm run build
+    - pnpm install
+    - pnpm run build
 
 1_build_test_java:
   stage: 2_build_and_install
@@ -32,34 +32,34 @@ after_script:
     - cd backend
     - mvn clean
     - mvn test
-    
+
 1_report-engine-dev-install:
   stage: 3_mvn_install
-  script:  
+  script:
     - pwd
     - cd $CI_PROJECT_DIR/
     - git reset --hard HEAD
     - rm -rf node_modules
-    - npm install
+    - pnpm install
     - rm -rf backend/www/*.js
-    - npm run build
+    - pnpm run build
     - cd backend
     - ls -al www/
     - pwd
     - mvn clean compile deploy -DskipTests
   only:
-    - dev    
+    - dev
 
 2_report-engine-stable-install:
   stage: 3_mvn_install
-  script:  
+  script:
     - pwd
     - cd $CI_PROJECT_DIR/
     - git reset --hard HEAD
     - rm -rf node_modules
-    - npm install
+    - pnpm install
     - rm -rf backend/www/*.js
-    - npm run build
+    - pnpm run build
     - cd backend
     - ls -al www/
     - pwd
