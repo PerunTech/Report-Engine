@@ -1,3 +1,4 @@
 # npm dependencies
 /node_modules
-
+backend/www/index.html
+backend/www/config.js
