@@ -5,8 +5,8 @@
 
 /* SIDEMENU */
 .side-menu-container {
-    background: #3a4b48;
     width: 20%;
+    background-color: white;
     box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;
     overflow: auto;
     overflow-x: hidden;
@@ -18,9 +18,8 @@
 
 .table-container {
     color: white;
-    box-shadow: rgb(0 0 0 / 25%) 0px 54px 55px, rgb(0 0 0 / 12%) 2px -20px 20px 20px, rgb(0 0 0 / 12%) 0px 4px 6px, rgb(0 0 0 / 17%) 0px 12px 13px, rgb(0 0 0 / 9%) 0px -3px 5px;
     padding: 15px;
-    background: linear-gradient(60deg, #304036, #52655b, #526558);
+    background: linear-gradient(360deg, #304040, #455751, #485a53);
 }
 
 .table-name {
@@ -135,4 +134,43 @@
 
 .btn-width {
     width: 500px;
+}
+
+.search-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    width: 100%;
+}
+
+.search-div span {
+    width: 10%;
+    margin-left: 5px;
+    box-shadow: none;
+}
+
+.search-div input {
+    width: 90%;
+    height: 40px;
+    border: none;
+}
+
+.search-div input:focus {
+    outline: none;
+    border: none;
+}
+
+.empty-search-container {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+    box-shadow: rgb(0 0 0 / 5%) 0px 0px 0px 1px;
+    height: 87vh;
+}
+
+.empty-search-container>p {
+    font-weight: bold;
 }
