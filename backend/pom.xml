@@ -12,14 +12,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<build>
+		<sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>
 				<directory>${project.basedir}</directory>
 				<includes>
 					<include>labels/*</include>
 					<include>www/**/*.*</include>
-					<include>configuration/*</include>
-					<include>permission-configuration/*</include>
 				</includes>
 			</resource>
 		</resources>
@@ -60,10 +59,10 @@
 							A bundle that provides services for report-engine
 						</Bundle-Description>
 						<Bundle-Activator>
-							com.prtech.iacs_sap.Activator
+							com.prtech.report_engine.Activator
 						</Bundle-Activator>
 						<Export-Package>
-							com.prtech.iacs_sap;com.prtech.iacs_sap_bl
+							com.prtech.report_engine
 						</Export-Package>
 						<Import-Package>
 							com.eclipsesource.jaxrs.publisher;version=!,*
