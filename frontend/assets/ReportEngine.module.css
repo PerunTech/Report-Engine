@@ -176,18 +176,10 @@
 }
 
 .btn-back {
-    border: 1px solid #b5b5b5;
-    margin: 1vh;
     padding: 0.5vh;
-    border-radius: 5px;
     color: #304040;
     background-color: #ffffff;
-    position: absolute;
-    width: 150px;
-    left: 20.2%;
-    top: -0.7%;
-}
-
-.report-engine-main-container {
-    position: relative;
+    width: 100%;
+    background: linear-gradient(360deg, #304040, #455751, #485a53);
+    color: white;
 }
