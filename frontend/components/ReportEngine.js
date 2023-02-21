@@ -1,9 +1,11 @@
 import {
-    React,
+    React, createHashHistory
 } from "perun-core";
 import MainContent from './MainContent/MainContent';
 import SideMenu from './SideMenu';
 import style from "./../assets/ReportEngine.module.css"
+import { icons } from '../assets/svgHolder';
+const history = createHashHistory();
 const { useState } = React
 const ReportEngine = () => {
     const [selectedFields, setSelectedFields] = useState([])
@@ -15,14 +17,14 @@ const ReportEngine = () => {
         setSelectedFields(uniqueObjArray)
     }
 
-    const removeFileClick=(file)=>{
-let tempArr = [...selectedFields]
-tempArr.forEach((field,i)=>{
-    if(field.key===file.name){
-        tempArr.splice(i,1)
-    }
-})
-setSelectedFields(tempArr)
+    const removeFileClick = (file) => {
+        let tempArr = [...selectedFields]
+        tempArr.forEach((field, i) => {
+            if (field.key === file.name) {
+                tempArr.splice(i, 1)
+            }
+        })
+        setSelectedFields(tempArr)
     }
 
     return (
@@ -30,8 +32,9 @@ setSelectedFields(tempArr)
             <div className={style['side-menu-container']}>
                 <SideMenu handleFieldClick={handleFieldClick} />
             </div>
+            <button onClick={() => { history.goBack() }} className={style['btn-back']}><span>{icons.back}Назад</span></button>
             {selectedFields.length > 0 && <div className={style['main-content-container']}>
-                <MainContent selectedFields={selectedFields}  removeFileClick={removeFileClick}/>
+                <MainContent selectedFields={selectedFields} removeFileClick={removeFileClick} />
             </div>}
         </div>
     )
