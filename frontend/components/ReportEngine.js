@@ -30,9 +30,10 @@ const ReportEngine = () => {
     return (
         <div className={style['report-engine-main-container']}>
             <div className={style['side-menu-container']}>
+                <button onClick={() => { history.goBack() }} className={style['btn-back']}><span>{icons.back}Назад</span></button>
                 <SideMenu handleFieldClick={handleFieldClick} />
             </div>
-            <button onClick={() => { history.goBack() }} className={style['btn-back']}><span>{icons.back}Назад</span></button>
+
             {selectedFields.length > 0 && <div className={style['main-content-container']}>
                 <MainContent selectedFields={selectedFields} removeFileClick={removeFileClick} />
             </div>}
