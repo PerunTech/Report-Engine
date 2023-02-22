@@ -101,7 +101,7 @@ const MainContent = (props) => {
                 <div className={style['mid-content']}>{mainContentThree}</div>
             </div>
             <div className={style['mid-content-btn-holder']}>
-                <button className={`btn-success btn_save_form ${style['btn-width']}`} onClick={() => { console.log(globalArr) }}>Generate Report</button>
+                <button className={`btn-success btn_save_form ${style['btn-width']}`} onClick={() => { console.log(JSON.stringify(globalArr)) }}>Generate Report</button>
             </div>
 
         </>
