@@ -45,7 +45,7 @@ const MainContent = (props) => {
     const generateMainContentTwo = () => {
         let content = (<div className={style['main-field-container']}>
             {globalArr.map(field => {
-                return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'operator')} id={field.table_name} key={field.table_name}>
+                return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
                     <option value={'equal'}>Equal</option>
                     <option value={'withlike'}>WithLike</option>
                     <option value={'endswith'}>Ends with</option>
@@ -59,7 +59,7 @@ const MainContent = (props) => {
     const generateMainContentThree = () => {
         let content = (<div className={style['main-field-container']}>
             {globalArr.map(field => {
-                return (<div className={style['input-container']}><input value={field.value && field.value} style={{ 'background': 'none' }} className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'input')} key={field.table_name} id={field.table_name} type='string' /> <span onClick={() => {
+                return (<div className={style['input-container']}><input value={field.value && field.value} style={{ 'background': 'none' }} className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'input')} key={field.field_name} id={field.field_name} type='string' /> <span onClick={() => {
                     props.removeFileClick(field)
                     innerRemoveFunc(field)
                 }}>{icons.delete}</span> </div>)
@@ -72,11 +72,11 @@ const MainContent = (props) => {
         let tempArr = globalArr
         tempArr.forEach(field => {
             if (inputType === 'input') {
-                if (field.table_name === e.target.id) {
+                if (field.field_name === e.target.id) {
                     field.value = e.target.value
                 }
             } else {
-                if (field.table_name === e.target.id) {
+                if (field.field_name === e.target.id) {
                     field.operator = e.target.value
                 }
             }
@@ -86,7 +86,7 @@ const MainContent = (props) => {
     //
     const innerRemoveFunc = (file) => {
         globalArr.forEach((field, i) => {
-            if (field.table_name === file.table_name) {
+            if (field.field_name === filefield.field_name) {
                 globalArr.splice(i, 1)
             }
         })
