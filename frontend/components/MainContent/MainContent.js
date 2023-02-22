@@ -24,7 +24,7 @@ const MainContent = (props) => {
         let tempArr = globalArr
         let content = (<div className={style['main-field-container']}>
             {props.selectedFields.map(field => {
-                { tempArr.push({ name: field.key, dd: 'equal' }) }
+                { tempArr.push({ field_name: field.key, operator: 'equal' }) }
                 let newobj = { ['field.key']: {} }
                 Object.assign(globalArr, newobj)
                 return <div className={style['main-field-one']}>
@@ -35,7 +35,7 @@ const MainContent = (props) => {
         </div>)
         setMainContnetOne(content)
         tempArr = tempArr.reverse()
-        let uniqueObjArray = [...new Map(tempArr.map((item) => [item["name"], item])).values()];
+        let uniqueObjArray = [...new Map(tempArr.map((item) => [item["field_name"], item])).values()];
         globalArr = uniqueObjArray
         globalArr = globalArr.reverse()
         generateMainContentThree()
@@ -45,7 +45,7 @@ const MainContent = (props) => {
     const generateMainContentTwo = () => {
         let content = (<div className={style['main-field-container']}>
             {globalArr.map(field => {
-                return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'dd')} id={field.name} key={field.name}>
+                return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
                     <option value={'equal'}>Equal</option>
                     <option value={'withlike'}>WithLike</option>
                     <option value={'endswith'}>Ends with</option>
@@ -59,7 +59,7 @@ const MainContent = (props) => {
     const generateMainContentThree = () => {
         let content = (<div className={style['main-field-container']}>
             {globalArr.map(field => {
-                return (<div className={style['input-container']}><input value={field.input && field.input} style={{ 'background': 'none' }} className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'input')} key={field.name} id={field.name} type='string' /> <span onClick={() => {
+                return (<div className={style['input-container']}><input value={field.value && field.value} style={{ 'background': 'none' }} className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'input')} key={field.field_name} id={field.field_name} type='string' /> <span onClick={() => {
                     props.removeFileClick(field)
                     innerRemoveFunc(field)
                 }}>{icons.delete}</span> </div>)
@@ -72,12 +72,12 @@ const MainContent = (props) => {
         let tempArr = globalArr
         tempArr.forEach(field => {
             if (inputType === 'input') {
-                if (field.name === e.target.id) {
-                    field.input = e.target.value
+                if (field.field_name === e.target.id) {
+                    field.value = e.target.value
                 }
             } else {
-                if (field.name === e.target.id) {
-                    field.dd = e.target.value
+                if (field.field_name === e.target.id) {
+                    field.operator = e.target.value
                 }
             }
         })
@@ -86,7 +86,7 @@ const MainContent = (props) => {
     //
     const innerRemoveFunc = (file) => {
         globalArr.forEach((field, i) => {
-            if (field.name === file.name) {
+            if (field.field_name === filefield.field_name) {
                 globalArr.splice(i, 1)
             }
         })
