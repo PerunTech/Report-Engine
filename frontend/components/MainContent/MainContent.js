@@ -24,7 +24,7 @@ const MainContent = (props) => {
         let tempArr = globalArr
         let content = (<div className={style['main-field-container']}>
             {props.selectedFields.map(field => {
-                { tempArr.push({ table_name: field.key, operator: 'equal' }) }
+                { tempArr.push({ field_name: field.key, operator: 'equal' }) }
                 let newobj = { ['field.key']: {} }
                 Object.assign(globalArr, newobj)
                 return <div className={style['main-field-one']}>
@@ -35,7 +35,7 @@ const MainContent = (props) => {
         </div>)
         setMainContnetOne(content)
         tempArr = tempArr.reverse()
-        let uniqueObjArray = [...new Map(tempArr.map((item) => [item["table_name"], item])).values()];
+        let uniqueObjArray = [...new Map(tempArr.map((item) => [item["field_name"], item])).values()];
         globalArr = uniqueObjArray
         globalArr = globalArr.reverse()
         generateMainContentThree()
