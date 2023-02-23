@@ -61,7 +61,7 @@ const SideMenu = (props) => {
             tempArr.forEach(object => {
                 if (object['SVAROG_TABLES.OBJECT_ID'] == table['SVAROG_TABLES.OBJECT_ID']) {
                     setLoading(true)
-                    axios.get(`${window.server}/ReactElements/getTableFieldList/${props.svSession}/${table['SVAROG_TABLES.TABLE_NAME']}`).then((res) => {
+                    axios.get(`${window.server}/ReactElements/getTableFieldListFull/${props.svSession}/${table['SVAROG_TABLES.TABLE_NAME']}/true`).then((res) => {
                         object.childList = res.data
                         object.opened = true
                         setTables(tempArr)
