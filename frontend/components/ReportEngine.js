@@ -43,7 +43,6 @@ const ReportEngine = () => {
     }
 
     const removeFileClick = (file) => {
-        console.log(file);
         let tempArr = [...selectedFields]
         tempArr.forEach((field, i) => {
             if (field.key === file.field_name) {
