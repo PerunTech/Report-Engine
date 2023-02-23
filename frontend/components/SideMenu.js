@@ -29,9 +29,9 @@ const SideMenu = (props) => {
     const generateSideMenu = () => {
         if (input) {
             if (inputArr.length > 0) {
-                return inputArr.map(table => <div style={{ 'cursor': 'pointer' }} className={`${style['table-container']} ${table.opened ? style['opened'] : style['closed']}`} onClick={() => handleClick(table)} key={table['SVAROG_TABLES.OBJECT_ID']} id={table['SVAROG_TABLES.OBJECT_ID']}>
+                return inputArr.map(table => <div style={{ 'cursor': 'pointer' }} className={`${style['table-container']} ${table.opened ? style['opened'] : style['closed']} ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? style['parent'] : style['notparent']}`} onClick={() => handleClick(table)} key={table['SVAROG_TABLES.OBJECT_ID']} id={table['SVAROG_TABLES.OBJECT_ID']}>
                     <div className={style['table-name']}><p>{table['SVAROG_TABLES.TABLE_NAME']}</p> <span>{table.opened ? icons.minus : icons.plus}</span></div>
-                    {table.opened && <div className={style['field-container']}>
+                    {table.opened && <div className={`${style['field-container']} ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? style['has-parent'] : style['noparent']}`}>
                         {generateSideMenuChild(table)}
                     </div>}
                 </div>)
@@ -39,9 +39,9 @@ const SideMenu = (props) => {
                 return <div className={style['empty-search-container']}><p>Нема пронајдени табели</p></div>
             }
         } else {
-            return tables.map(table => <div style={{ 'cursor': 'pointer' }} className={`${style['table-container']} ${table.opened ? style['opened'] : style['closed']}`} onClick={() => handleClick(table)} key={table['SVAROG_TABLES.OBJECT_ID']} id={table['SVAROG_TABLES.OBJECT_ID']}>
+            return tables.map(table => <div style={{ 'cursor': 'pointer' }} className={`${style['table-container']} ${table.opened ? style['opened'] : style['closed']} ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? style['parent'] : style['notparent']}`} onClick={() => handleClick(table)} key={table['SVAROG_TABLES.OBJECT_ID']} id={table['SVAROG_TABLES.OBJECT_ID']}>
                 <div className={style['table-name']}><p>{table['SVAROG_TABLES.TABLE_NAME']}</p> <span>{table.opened ? icons.minus : icons.plus}</span></div>
-                {table.opened && <div className={style['field-container']}>
+                {table.opened && <div className={`${style['field-container']} ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? style['has-parent'] : style['noparent']}`}>
                     {generateSideMenuChild(table)}
                 </div>}
             </div>)
@@ -75,7 +75,8 @@ const SideMenu = (props) => {
     }
 
     const generateSideMenuChild = (table) => {
-        return table.childList.map(field => <div onClick={(e) => props.handleFieldClick(e, field)} key={field.key}>
+        let tableobj = table
+        return table.childList.map((field) => <div onClick={(e) => props.handleFieldClick(e, field, tableobj)} key={field.key}>
 
             <p>{field['FIELD_NAME']}</p>
         </div>

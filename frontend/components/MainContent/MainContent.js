@@ -28,7 +28,7 @@ const MainContent = (props) => {
                 { tempArr.push({ field_name: field.key, operator: 'equal' }) }
                 let newobj = { ['field.key']: {} }
                 Object.assign(globalArr, newobj)
-                return <div className={style['main-field-one']}>
+                return <div className={`${style['main-field-one']} ${field.parent && style['has-parent']}`}>
                     <p>{field.key}</p>
 
                 </div>
@@ -48,7 +48,7 @@ const MainContent = (props) => {
             {globalArr.map(field => {
                 return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
                     <option value={'equal'}>Equal</option>
-                    <option value={'withlike'}>WithLike</option>
+                    <option value={'like'}>Like</option>
                     <option value={'endswith'}>Ends with</option>
                     <option value={'beginswith'}>Begins with</option>
                 </select>
@@ -87,7 +87,7 @@ const MainContent = (props) => {
     //
     const innerRemoveFunc = (file) => {
         globalArr.forEach((field, i) => {
-            if (field.field_name === filefield.field_name) {
+            if (field.field_name === file.field_name) {
                 globalArr.splice(i, 1)
             }
         })
