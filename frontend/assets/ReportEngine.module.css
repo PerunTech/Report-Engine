@@ -183,3 +183,15 @@
     background: linear-gradient(360deg, #304040, #455751, #485a53);
     color: white;
 }
+
+.parent {
+    background: linear-gradient(360deg, #643131, #9f2929, #9b2f3e) !important;
+}
+
+.has-parent {
+    background: #b74343 !important;
+}
+
+.flag-disabled {
+    display: none !important;
+}
