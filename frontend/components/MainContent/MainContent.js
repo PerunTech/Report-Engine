@@ -62,6 +62,7 @@ const MainContent = (props) => {
           default:
             return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
               <option value={'like'}>Like</option>
+              <option value={'equal'}>Equal</option>
               <option value={'startsWith'}>Starts with</option>
               <option value={'endsWith'}>Ends with</option>
             </select>
