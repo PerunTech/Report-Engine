@@ -46,12 +46,27 @@ const MainContent = (props) => {
   const generateMainContentTwo = () => {
     let content = (<div className={style['main-field-container']}>
       {globalArr.map(field => {
-        return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
-          <option value={'equal'}>Equal</option>
-          <option value={'like'}>Like</option>
-          <option value={'endswith'}>Ends with</option>
-          <option value={'beginswith'}>Begins with</option>
-        </select>
+        switch (field.field_type) {
+          case 'NUMERIC':
+            return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
+              <option value={'equal'}>Equal</option>
+              <option value={'less'}>Less</option>
+              <option value={'greater'}>Greater</option>
+            </select>
+          case 'NVARCHAR':
+            return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
+              <option value={'equal'}>Equal</option>
+              <option value={'less'}>Less</option>
+              <option value={'greater'}>Greater</option>
+            </select>
+          default:
+            return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
+              <option value={'like'}>Like</option>
+              <option value={'startsWith'}>Starts with</option>
+              <option value={'endsWith'}>Ends with</option>
+            </select>
+        }
+
       })}
     </div>)
     setMainContnetTwo(content)
@@ -112,10 +127,12 @@ const MainContent = (props) => {
   }
   const getData = () => {
     let url = window.server + `/WsReporting/svarog-reporting/get/xls/${props.svSession}`
+
+    let data = { 'params': globalArr }
     axios({
       method: "post",
-      data: globalArr,
-      url: url,
+      data: JSON.stringify(data),
+      url,
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     }).then(res => {
       console.log(res.data)
