@@ -128,7 +128,7 @@ const MainContent = (props) => {
     })
   }
   const getData = () => {
-    let url = window.server + `/WsReporting/svarog-reporting/get/xls/${props.svSession}`
+    let url = window.server + `/svarog-reporting/get/xls/${props.svSession}`
 
     let data = { 'params': globalArr }
     axios({
