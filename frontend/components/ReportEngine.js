@@ -26,7 +26,7 @@ const ReportEngine = () => {
     e.stopPropagation()
     let tempArr = [...selectedFields]
     if (table['SVAROG_TABLES.PARENT_ID'] === 0 && table['SVAROG_TABLES.TABLE_NAME'] !== parentName && parentName) {
-      alertUser(true, 'info', "Ова да се смени не знам што да пишува")
+      alertUser(true, 'info', "Не може да се направи поврзување помеѓу табелите.")
     } else if (table['SVAROG_TABLES.PARENT_ID'] === 0 && !parentName) {
       tempArr.push(innerField)
 
