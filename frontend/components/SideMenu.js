@@ -18,11 +18,19 @@ const SideMenu = (props) => {
   useEffect(() => {
     setLoading(true)
     axios.get(`${window.server}/ReactElements/getTableData/${props.svSession}/SVAROG_TABLES/100000`).then((res) => {
+      let temp1 = []
+      let temp2 = []
       res.data.forEach(data => {
         data.opened = false;
         setLoading(false)
       })
-      setTables(res.data)
+      res.data.map(table => {
+        if (table['SVAROG_TABLES.PARENT_ID'] !== 0) {
+          temp1.push(table)
+        }
+        else { temp2.push(table) }
+      })
+      setTables(temp1.concat(temp2))
     })
   }, [])
 
