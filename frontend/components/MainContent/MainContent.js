@@ -1,16 +1,19 @@
 import {
   React,
   connect,
-  axios
+  axios,
+  Loadning
 } from "perun-core";
 import style from "./../../assets/ReportEngine.module.css"
 import { icons } from "../../assets/svgHolder";
+import { downloadFile } from '../../assets/DownloadFile';
 const { useEffect, useState } = React
 let globalArr = []
 const MainContent = (props) => {
   const [mainContentOne, setMainContnetOne] = useState(undefined)
   const [mainContentTwo, setMainContnetTwo] = useState(undefined)
   const [mainContentThree, setMainContnetThree] = useState(undefined)
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     generateMainContentOne()
   }, [props.selectedFields])
@@ -55,15 +58,15 @@ const MainContent = (props) => {
             </select>
           case 'NVARCHAR':
             return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
-              <option value={'like'}>Like</option>
               <option value={'equal'}>Equal</option>
+              <option value={'like'}>Like</option>
               <option value={'startsWith'}>Starts with</option>
               <option value={'endsWith'}>Ends with</option>
             </select>
           default:
             return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
-              <option value={'like'}>Like</option>
               <option value={'equal'}>Equal</option>
+              <option value={'like'}>Like</option>
               <option value={'startsWith'}>Starts with</option>
               <option value={'endsWith'}>Ends with</option>
             </select>
@@ -129,6 +132,7 @@ const MainContent = (props) => {
     })
   }
   const getData = () => {
+    setLoading(true)
     let url = window.server + `/svarog-reporting/get/xls/${props.svSession}`
 
     let data = { 'params': globalArr }
@@ -136,14 +140,15 @@ const MainContent = (props) => {
       method: "post",
       data: JSON.stringify(data),
       url,
+      responseType: 'blob',
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     }).then(res => {
-      console.log(res.data)
+      downloadFile(res, 'file', setLoading(false))
     })
   }
   return (
     <>
-
+      {loading && <Loadning />}
       <div className={style['mid-content-container']}>
         <div className={style['mid-content']}>{mainContentOne}</div>
 

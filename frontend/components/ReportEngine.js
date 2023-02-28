@@ -6,6 +6,7 @@ import SideMenu from './SideMenu';
 import style from "./../assets/ReportEngine.module.css"
 import { icons } from '../assets/svgHolder';
 const { alertUser } = elements
+import { downloadFile } from "../assets/DownloadFile"
 const history = createHashHistory();
 const { useState } = React
 const ReportEngine = () => {
