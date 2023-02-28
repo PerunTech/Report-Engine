@@ -144,6 +144,10 @@ const MainContent = (props) => {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     }).then(res => {
       downloadFile(res, 'file', setLoading(false))
+    }).catch(err => {
+      console.error(err)
+      setLoading(false)
+      alertUser(true, 'error', 'Наста грешка при генерирање на документот')
     })
   }
   return (
