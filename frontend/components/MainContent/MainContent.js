@@ -102,6 +102,7 @@ const MainContent = (props) => {
       }
     })
     globalArr = tempArr
+    generateMainContentThree()
   }
 
   const fieldType = (field) => {
