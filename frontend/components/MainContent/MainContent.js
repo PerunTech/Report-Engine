@@ -2,7 +2,8 @@ import {
   React,
   connect,
   axios,
-  Loadning
+  Loading,
+  elements
 } from "perun-core";
 import style from "./../../assets/ReportEngine.module.css"
 import { icons } from "../../assets/svgHolder";
@@ -14,6 +15,7 @@ const MainContent = (props) => {
   const [mainContentTwo, setMainContnetTwo] = useState(undefined)
   const [mainContentThree, setMainContnetThree] = useState(undefined)
   const [loading, setLoading] = useState(false)
+  const { alertUser } = elements
   useEffect(() => {
     generateMainContentOne()
   }, [props.selectedFields])
@@ -143,7 +145,9 @@ const MainContent = (props) => {
       responseType: 'blob',
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     }).then(res => {
-      downloadFile(res, 'file', setLoading(false))
+      downloadFile(res, 'file', () => {
+        setLoading(false)
+      })
     }).catch(err => {
       console.error(err)
       setLoading(false)
@@ -152,7 +156,7 @@ const MainContent = (props) => {
   }
   return (
     <>
-      {loading && <Loadning />}
+      {loading && <Loading />}
       <div className={style['mid-content-container']}>
         <div className={style['mid-content']}>{mainContentOne}</div>
 
