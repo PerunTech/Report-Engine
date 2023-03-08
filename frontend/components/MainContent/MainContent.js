@@ -28,13 +28,17 @@ const MainContent = (props) => {
   //generates  the table names and creates a basic clone array of objects for the formData
   const generateMainContentOne = () => {
     let tempArr = globalArr
+    let key = 'key'
+    if (props.isAnalytics) {
+      key = 'KEY'
+    }
     let content = (<div className={style['main-field-container']}>
       {props.selectedFields.map(field => {
-        { tempArr.push({ field_name: field.key, field_type: field.FIELD_TYPE ? field.FIELD_TYPE : '', operator: 'equal' }) }
-        let newobj = { ['field.key']: {} }
+        { tempArr.push({ field_name: field[`${key}`], field_type: field.FIELD_TYPE ? field.FIELD_TYPE : '', operator: 'equal' }) }
+        let newobj = { ['field[`${key}`]']: {} }
         Object.assign(globalArr, newobj)
         return <div className={`${style['main-field-one']} ${field.parent && style['has-parent']}`}>
-          <p>{field.key}</p>
+          <p>{field[`${key}`]}</p>
 
         </div>
       })}
