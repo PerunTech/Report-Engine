@@ -82,7 +82,6 @@ const ReportEngine = () => {
     e.stopPropagation()
     let tempArr = [...selectedFields]
     tempArr.push(field)
-    console.log(tempArr)
     let uniqueObjArray = [...new Map(tempArr.map((item) => [item["key"], item])).values()];
     setSelectedFields(uniqueObjArray)
     setSelectedFields(tempArr)
