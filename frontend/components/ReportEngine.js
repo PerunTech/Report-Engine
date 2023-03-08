@@ -3,6 +3,7 @@ import {
 } from "perun-core";
 import MainContent from './MainContent/MainContent';
 import SideMenu from './SideMenu';
+import SideMenuAnalytics from './SideMenuAnalytics';
 import style from "./../assets/ReportEngine.module.css"
 import { icons } from '../assets/svgHolder';
 const { alertUser } = elements
@@ -12,6 +13,7 @@ const ReportEngine = () => {
   const [selectedFields, setSelectedFields] = useState([])
   const [parentActive, setParentActive] = useState(false)
   const [parentName, setParentName] = useState('')
+  const [system, setShowSystem] = useState(false)
   const handleFieldClick = (e, field, table) => {
     let innerField = field
     if (table['SVAROG_TABLES.PARENT_ID']) {
@@ -66,16 +68,38 @@ const ReportEngine = () => {
       }
     }
   }
+  //used to clean up after table switch and toggle which table is shown
+  const toggleFunction = () => {
+    //toggle tables
+    setShowSystem(!system)
+    //clean up
+    setParentActive(false)
+    setSelectedFields([])
+    setParentName('')
+  }
 
+  const handleFieldClickAnalytics = (e, field) => {
+    e.stopPropagation()
+    let tempArr = [...selectedFields]
+    tempArr.push(field)
+    console.log(tempArr)
+    let uniqueObjArray = [...new Map(tempArr.map((item) => [item["key"], item])).values()];
+    setSelectedFields(uniqueObjArray)
+    setSelectedFields(tempArr)
+  }
   return (
     <div className={style['report-engine-main-container']}>
       <div className={style['side-menu-container']}>
-        <button onClick={() => { history.goBack() }} className={style['btn-back']}><span>{icons.back}Назад</span></button>
-        <SideMenu handleFieldClick={handleFieldClick} />
+        <button onClick={() => { history.goBack() }} className={style['btn-back']}><span>{icons.back}Back</span></button>
+        <div className={style['table-toggle-button']} onClick={() => toggleFunction()}>
+          <p>Show {system ? "Analytics" : "System"}</p>
+        </div>
+        {system && <SideMenu handleFieldClick={handleFieldClick} />}
+        {!system && <SideMenuAnalytics handleFieldClick={handleFieldClickAnalytics} />}
       </div>
 
       {selectedFields.length > 0 && <div className={style['main-content-container']}>
-        <MainContent selectedFields={selectedFields} removeFileClick={removeFileClick} />
+        <MainContent isAnalytics={!system} selectedFields={selectedFields} removeFileClick={removeFileClick} />
       </div>}
     </div>
   )
