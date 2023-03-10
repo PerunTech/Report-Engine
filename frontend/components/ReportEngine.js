@@ -45,9 +45,13 @@ const ReportEngine = () => {
   }
 
   const removeFileClick = (file) => {
+    let key = 'key'
+    if (!system) {
+      key = 'KEY'
+    }
     let tempArr = [...selectedFields]
     tempArr.forEach((field, i) => {
-      if (field.key === file.field_name) {
+      if (field[`${key}`] === file.field_name) {
         tempArr.splice(i, 1)
       }
     })
@@ -79,12 +83,15 @@ const ReportEngine = () => {
   }
 
   const handleFieldClickAnalytics = (e, field) => {
+    let key = 'key'
+    if (!system) {
+      key = 'KEY'
+    }
     e.stopPropagation()
     let tempArr = [...selectedFields]
     tempArr.push(field)
-    let uniqueObjArray = [...new Map(tempArr.map((item) => [item["key"], item])).values()];
+    let uniqueObjArray = [...new Map(tempArr.map((item) => [item[`${key}`], item])).values()];
     setSelectedFields(uniqueObjArray)
-    setSelectedFields(tempArr)
   }
   return (
     <div className={style['report-engine-main-container']}>
