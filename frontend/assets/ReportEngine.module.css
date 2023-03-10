@@ -91,13 +91,9 @@
 
 .main-field-one {
     background: #2e6c54;
-    box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;
-    padding: 8px;
-    border-radius: 4px;
     color: white;
-    font-weight: bold;
-    margin: 10px 0px 10px 0px;
-    width: 100%;
+    display: flex;
+    overflow: auto hidden;
 }
 
 .main-field-one>p {
@@ -206,5 +202,5 @@
     text-transform: uppercase;
     font-weight: bold;
     color: white;
-    background: #616261;
+    background: #c5933e;
 }

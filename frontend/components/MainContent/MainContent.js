@@ -32,12 +32,12 @@ const MainContent = (props) => {
     if (props.isAnalytics) {
       key = 'KEY'
     }
-    let content = (<div className={style['main-field-container']}>
+    let content = (<div className={`class-for-scroll  ${style['main-field-container']}`}>
       {props.selectedFields.map(field => {
         { tempArr.push({ field_name: field[`${key}`], field_type: field.FIELD_TYPE ? field.FIELD_TYPE : '', operator: 'equal' }) }
         let newobj = { ['field[`${key}`]']: {} }
         Object.assign(globalArr, newobj)
-        return <div className={`${style['main-field-one']} ${field.parent && style['has-parent']}`}>
+        return <div className={`custom-select ${style['main-content-select']} ${style['main-field-one']} ${field.parent && style['has-parent']}`}>
           <p>{field[`${key}`]}</p>
 
         </div>
