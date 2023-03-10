@@ -61,6 +61,7 @@ const MainContent = (props) => {
               <option value={'equal'}>Equal</option>
               <option value={'less'}>Less</option>
               <option value={'greater'}>Greater</option>
+              {props.isAnalytics && <option value={'sum'}>Sum</option>}
             </select>
           case 'NVARCHAR':
             return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
