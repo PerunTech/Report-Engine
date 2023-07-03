@@ -106,11 +106,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>svarog</groupId>
-			<artifactId>svarog-io</artifactId>
-			<version>[1.0.4,)</version>
-		</dependency>
-		<dependency>
 			<groupId>perun</groupId>
 			<artifactId>perun-core</artifactId>
 			<version>[1.16.0,)</version>
