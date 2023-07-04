@@ -8,7 +8,7 @@ import {
 import style from "./../assets/ReportEngine.module.css"
 import { icons } from '../assets/svgHolder';
 const { useState, useEffect } = React;
-
+const { alertUser } = elements
 const SideMenu = (props) => {
   const [tables, setTables] = useState([])
   const [loading, setLoading] = useState(false)
@@ -31,6 +31,10 @@ const SideMenu = (props) => {
         else { temp2.push(table) }
       })
       setTables(temp1.concat(temp2))
+    }).catch(err => {
+      console.error(err)
+      alertUser(true, 'error', 'Настана грешка', err)
+      setLoading(false)
     })
   }, [])
 
@@ -73,6 +77,10 @@ const SideMenu = (props) => {
             object.childList = res.data
             object.opened = true
             setTables(tempArr)
+            setLoading(false)
+          }).catch(err => {
+            console.error(err)
+            alertUser(true, 'error', 'Настана грешка', err)
             setLoading(false)
           })
         }

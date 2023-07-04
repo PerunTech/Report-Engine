@@ -7,6 +7,7 @@ import {
 } from "perun-core";
 import style from "./../assets/ReportEngine.module.css"
 import { icons } from '../assets/svgHolder';
+const { alertUser } = elements
 const { useState, useEffect } = React;
 
 const SideMenuAnalytics = (props) => {
@@ -21,6 +22,10 @@ const SideMenuAnalytics = (props) => {
         setLoading(false)
       })
       setTables(res.data)
+    }).catch(err => {
+      console.error(err)
+      alertUser(true, 'error', 'Настана грешка', err)
+      setLoading(false)
     })
   }, [])
 
@@ -50,6 +55,10 @@ const SideMenuAnalytics = (props) => {
             object.childList = res.data
             object.opened = true
             setTables(tempArr)
+            setLoading(false)
+          }).catch(err => {
+            console.error(err)
+            alertUser(true, 'error', 'Настана грешка', err)
             setLoading(false)
           })
         }
