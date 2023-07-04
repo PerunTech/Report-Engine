@@ -58,11 +58,8 @@ const SideMenuAnalytics = (props) => {
             setLoading(false)
           }).catch(err => {
             console.error(err)
-              .catch(err => {
-                console.error(err)
-                alertUser(true, 'error', 'Настана грешка', err)
-                setLoading(false)
-              })
+            alertUser(true, 'error', 'Настана грешка', err)
+            setLoading(false)
           })
         }
       })
