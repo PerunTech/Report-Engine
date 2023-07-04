@@ -32,8 +32,10 @@ const SideMenu = (props) => {
       })
       setTables(temp1.concat(temp2))
     }).catch(err => {
-      console.error(err)
-      alertUser(true, 'error', 'Настана грешка', err)
+      console.log(err.response)
+      const title = err.response?.data?.title || 'Настана грешка'
+      const message = err.response?.data?.message || err.response?.data
+      alertUser(true, 'error', title, message)
       setLoading(false)
     })
   }, [])
@@ -79,8 +81,10 @@ const SideMenu = (props) => {
             setTables(tempArr)
             setLoading(false)
           }).catch(err => {
-            console.error(err)
-            alertUser(true, 'error', 'Настана грешка', err)
+            console.log(err.response)
+            const title = err.response?.data?.title || 'Настана грешка'
+            const message = err.response?.data?.message || err.response?.data
+            alertUser(true, 'error', title, message)
             setLoading(false)
           })
         }

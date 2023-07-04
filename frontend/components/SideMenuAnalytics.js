@@ -23,8 +23,10 @@ const SideMenuAnalytics = (props) => {
       })
       setTables(res.data)
     }).catch(err => {
-      console.error(err)
-      alertUser(true, 'error', 'Настана грешка', err)
+      console.log(err.response)
+      const title = err.response?.data?.title || 'Настана грешка'
+      const message = err.response?.data?.message || err.response?.data
+      alertUser(true, 'error', title, message)
       setLoading(false)
     })
   }, [])
@@ -57,8 +59,10 @@ const SideMenuAnalytics = (props) => {
             setTables(tempArr)
             setLoading(false)
           }).catch(err => {
-            console.error(err)
-            alertUser(true, 'error', 'Настана грешка', err)
+            console.log(err.response)
+            const title = err.response?.data?.title || 'Настана грешка'
+            const message = err.response?.data?.message || err.response?.data
+            alertUser(true, 'error', title, message)
             setLoading(false)
           })
         }
