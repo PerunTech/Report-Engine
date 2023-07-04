@@ -23,7 +23,7 @@ module.exports = (mode, { env }) => {
           use: {
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/preset-env', '@babel/preset-react', { 'plugins': ['@babel/plugin-proposal-class-properties'] }],
+              presets: ['@babel/preset-env', '@babel/preset-react'],
               cacheDirectory: true
             }
           }
@@ -38,7 +38,7 @@ module.exports = (mode, { env }) => {
             }
           },
           enforce: 'pre',
-          include: [/perun-core/, /persons-registry/]
+          include: [/perun-core/]
         },
         {
           // For pure CSS (without CSS modules)
