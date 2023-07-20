@@ -1,0 +1,3 @@
+.report-engine-class-for-scroll ::-webkit-scrollbar {
+    height: 7px !important;
+}

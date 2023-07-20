@@ -3,6 +3,7 @@ import {
   connect,
   axios,
   Loading,
+  PropTypes,
   elements
 } from "perun-core";
 import style from "./../../assets/ReportEngine.module.css"
@@ -10,7 +11,7 @@ import { icons } from "../../assets/svgHolder";
 import { downloadFile } from '../../assets/DownloadFile';
 const { useEffect, useState } = React
 let globalArr = []
-const MainContent = (props) => {
+const MainContent = (props, context) => {
   const [mainContentOne, setMainContnetOne] = useState(undefined)
   const [mainContentTwo, setMainContnetTwo] = useState(undefined)
   const [mainContentThree, setMainContnetThree] = useState(undefined)
@@ -32,7 +33,7 @@ const MainContent = (props) => {
     if (props.isAnalytics) {
       key = 'KEY'
     }
-    let content = (<div className={`class-for-scroll  ${style['main-field-container']}`}>
+    let content = (<div className={`report-engine-class-for-scroll  ${style['main-field-container']}`}>
       {props.selectedFields.map(field => {
         { tempArr.push({ field_name: field[`${key}`], field_type: field.FIELD_TYPE ? field.FIELD_TYPE : '', operator: 'equal' }) }
         let newobj = { ['field[`${key}`]']: {} }
@@ -156,7 +157,7 @@ const MainContent = (props) => {
     }).catch(err => {
       console.error(err)
       setLoading(false)
-      alertUser(true, 'error', 'Наста грешка при генерирање на документот')
+      alertUser(true, 'error', labelsManager.importLabel('error_occurred_generate', 'report_engine', context))
     })
   }
   return (
@@ -178,5 +179,7 @@ const MainContent = (props) => {
 const mapStateToProps = (state) => ({
   svSession: state.security.svSession,
 });
-
+MainContent.contextTypes = {
+  intl: PropTypes.object.isRequired
+}
 export default connect(mapStateToProps)(MainContent);

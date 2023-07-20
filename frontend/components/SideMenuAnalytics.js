@@ -3,14 +3,14 @@ import {
   connect,
   elements,
   axios,
+  PropTypes,
   Loading
 } from "perun-core";
-import style from "./../assets/ReportEngine.module.css"
 import { icons } from '../assets/svgHolder';
 const { alertUser } = elements
 const { useState, useEffect } = React;
-
-const SideMenuAnalytics = (props) => {
+import { labelsManager } from "../assets/LabelsExport"
+const SideMenuAnalytics = (props, context) => {
   const [tables, setTables] = useState([])
   const [loading, setLoading] = useState(false)
 
@@ -24,7 +24,7 @@ const SideMenuAnalytics = (props) => {
       setTables(res.data)
     }).catch(err => {
       console.log(err.response)
-      const title = err.response?.data?.title || 'Настана грешка'
+      const title = err.response?.data?.title || labelsManager.importLabel('error_occurred', 'report_engine', context)
       const message = err.response?.data?.message || err.response?.data
       alertUser(true, 'error', title, message)
       setLoading(false)
@@ -60,7 +60,7 @@ const SideMenuAnalytics = (props) => {
             setLoading(false)
           }).catch(err => {
             console.log(err.response)
-            const title = err.response?.data?.title || 'Настана грешка'
+            const title = err.response?.data?.title || labelsManager.importLabel('error_occurred', 'report_engine', context)
             const message = err.response?.data?.message || err.response?.data
             alertUser(true, 'error', title, message)
             setLoading(false)
@@ -94,4 +94,7 @@ const mapStateToProps = (state) => ({
   svSession: state.security.svSession,
 });
 
+SideMenuAnalytics.contextTypes = {
+  intl: PropTypes.object.isRequired
+}
 export default connect(mapStateToProps)(SideMenuAnalytics);

@@ -3,13 +3,15 @@ import {
   connect,
   elements,
   axios,
-  Loading
+  Loading,
+  PropTypes
 } from "perun-core";
 import style from "./../assets/ReportEngine.module.css"
 import { icons } from '../assets/svgHolder';
+import { labelsManager } from "../assets/LabelsExport"
 const { useState, useEffect } = React;
 const { alertUser } = elements
-const SideMenu = (props) => {
+const SideMenu = (props, context) => {
   const [tables, setTables] = useState([])
   const [loading, setLoading] = useState(false)
   const [inputArr, setinputArr] = useState([])
@@ -33,7 +35,7 @@ const SideMenu = (props) => {
       setTables(temp1.concat(temp2))
     }).catch(err => {
       console.log(err.response)
-      const title = err.response?.data?.title || 'Настана грешка'
+      const title = err.response?.data?.title || labelsManager.importLabel('error_occurred', 'report_engine', context)
       const message = err.response?.data?.message || err.response?.data
       alertUser(true, 'error', title, message)
       setLoading(false)
@@ -50,7 +52,7 @@ const SideMenu = (props) => {
           </div>}
         </div>)
       } else {
-        return <div className={style['empty-search-container']}><p>Нема пронајдени табели</p></div>
+        return <div className={style['empty-search-container']}><p>{labelsManager.importLabel('no_tabels_found', 'report_engine', context)}</p></div>
       }
     } else {
       return tables.map(table => <div style={{ 'cursor': 'pointer' }} className={`${style['table-container']} ${table.opened ? style['opened'] : style['closed']} ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? style['parent'] : style['notparent']}`} onClick={() => handleClick(table)} key={table['SVAROG_TABLES.OBJECT_ID']} id={table['SVAROG_TABLES.OBJECT_ID']}>
@@ -82,7 +84,7 @@ const SideMenu = (props) => {
             setLoading(false)
           }).catch(err => {
             console.log(err.response)
-            const title = err.response?.data?.title || 'Настана грешка'
+            const title = err.response?.data?.title || labelsManager.importLabel('error_occurred', 'report_engine', context)
             const message = err.response?.data?.message || err.response?.data
             alertUser(true, 'error', title, message)
             setLoading(false)
@@ -119,7 +121,7 @@ const SideMenu = (props) => {
   return (
     <>
       {loading && <Loading />}
-      <div className={style['search-div']}><span>{icons.search}</span><input placeholder={'Внесете вредност за пребарување'} onChange={(e) => { onChange(e) }} type='string' /></div>
+      <div className={style['search-div']}><span>{icons.search}</span><input placeholder={labelsManager.importLabel('enter_search_value', 'report_engine', context)} onChange={(e) => { onChange(e) }} type='string' /></div>
       {generateSideMenu()}
     </>
   );
@@ -128,5 +130,8 @@ const SideMenu = (props) => {
 const mapStateToProps = (state) => ({
   svSession: state.security.svSession,
 });
+SideMenu.contextTypes = {
+  intl: PropTypes.object.isRequired
+}
 
 export default connect(mapStateToProps)(SideMenu);

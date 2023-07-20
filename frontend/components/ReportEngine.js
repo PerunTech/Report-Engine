@@ -1,15 +1,15 @@
 import {
-  React, createHashHistory, elements
+  React, createHashHistory, elements, PropTypes
 } from "perun-core";
 import MainContent from './MainContent/MainContent';
 import SideMenu from './SideMenu';
 import SideMenuAnalytics from './SideMenuAnalytics';
-import style from "./../assets/ReportEngine.module.css"
 import { icons } from '../assets/svgHolder';
+import { labelsManager } from "../assets/LabelsExport"
 const { alertUser } = elements
 const history = createHashHistory();
 const { useState } = React
-const ReportEngine = () => {
+const ReportEngine = (context) => {
   const [selectedFields, setSelectedFields] = useState([])
   const [parentActive, setParentActive] = useState(false)
   const [parentName, setParentName] = useState('')
@@ -28,7 +28,7 @@ const ReportEngine = () => {
     e.stopPropagation()
     let tempArr = [...selectedFields]
     if (table['SVAROG_TABLES.PARENT_ID'] === 0 && table['SVAROG_TABLES.TABLE_NAME'] !== parentName && parentName) {
-      alertUser(true, 'info', "Известување", `Почитувани веќе имате избрано поле од табела носител. (${parentName})`)
+      alertUser(true, 'info', labelsManager.importLabel('notification_title', 'report_engine', context), `${labelsManager.importLabel('already_selected_parent', 'report_engine', context)}. (${parentName})`)
     } else if (table['SVAROG_TABLES.PARENT_ID'] === 0 && !parentName) {
       tempArr.push(innerField)
 
@@ -109,6 +109,9 @@ const ReportEngine = () => {
       </div>}
     </div>
   )
+}
+ReportEngine.contextTypes = {
+  intl: PropTypes.object.isRequired
 }
 
 export default ReportEngine
