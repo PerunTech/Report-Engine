@@ -3,14 +3,14 @@ import {
   connect,
   elements,
   axios,
+  PropTypes,
   Loading
 } from "perun-core";
-import style from "./../assets/ReportEngine.module.css"
 import { icons } from '../assets/svgHolder';
 const { alertUser } = elements
 const { useState, useEffect } = React;
-
-const SideMenuAnalytics = (props) => {
+import { labelsManager } from "../assets/LabelsExport"
+const SideMenuAnalytics = (props, context) => {
   const [tables, setTables] = useState([])
   const [loading, setLoading] = useState(false)
 
@@ -24,7 +24,7 @@ const SideMenuAnalytics = (props) => {
       setTables(res.data)
     }).catch(err => {
       console.log(err.response)
-      const title = err.response?.data?.title || 'Настана грешка'
+      const title = err.response?.data?.title || labelsManager.importLabel('error_occurred', 'report_engine', context)
       const message = err.response?.data?.message || err.response?.data
       alertUser(true, 'error', title, message)
       setLoading(false)
@@ -32,9 +32,9 @@ const SideMenuAnalytics = (props) => {
   }, [])
 
   const generateSideMenuAnalytics = () => {
-    return tables.map(table => <div style={{ 'cursor': 'pointer' }} className={`${style['table-container']} ${table.opened ? style['opened'] : style['closed']} ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? style['parent'] : style['notparent']}`} onClick={() => handleClick(table)} key={table['SVAROG_TABLES.OBJECT_ID']} id={table['SVAROG_TABLES.OBJECT_ID']}>
-      <div className={style['table-name']}><p>{table['OBJECT_NAME']}</p> <span>{table.opened ? icons.minus : icons.plus}</span></div>
-      {table.opened && <div className={`${style['field-container']}`}>
+    return tables.map(table => <div style={{ 'cursor': 'pointer' }} className={`'report-engine-table-container' ${table.opened ? 'report-engine-opened' : 'report-engine-closed'} ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? 'report-engine-parent' : 'report-engine-notparent'}`} onClick={() => handleClick(table)} key={table['SVAROG_TABLES.OBJECT_ID']} id={table['SVAROG_TABLES.OBJECT_ID']}>
+      <div className={'report-engine-table-name'}><p>{table['OBJECT_NAME']}</p> <span>{table.opened ? icons.minus : icons.plus}</span></div>
+      {table.opened && <div className={'report-engine-field-container'}>
         {generateSideMenuAnalyticsChild(table)}
       </div>}
     </div>)
@@ -60,7 +60,7 @@ const SideMenuAnalytics = (props) => {
             setLoading(false)
           }).catch(err => {
             console.log(err.response)
-            const title = err.response?.data?.title || 'Настана грешка'
+            const title = err.response?.data?.title || labelsManager.importLabel('error_occurred', 'report_engine', context)
             const message = err.response?.data?.message || err.response?.data
             alertUser(true, 'error', title, message)
             setLoading(false)
@@ -94,4 +94,7 @@ const mapStateToProps = (state) => ({
   svSession: state.security.svSession,
 });
 
+SideMenuAnalytics.contextTypes = {
+  intl: PropTypes.object.isRequired
+}
 export default connect(mapStateToProps)(SideMenuAnalytics);
