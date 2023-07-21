@@ -6,7 +6,6 @@ import {
   Loading,
   PropTypes
 } from "perun-core";
-import style from "./../assets/ReportEngine.module.css"
 import { icons } from '../assets/svgHolder';
 import { labelsManager } from "../assets/LabelsExport"
 const { useState, useEffect } = React;
@@ -45,19 +44,19 @@ const SideMenu = (props, context) => {
   const generateSideMenu = () => {
     if (input) {
       if (inputArr.length > 0) {
-        return inputArr.map(table => <div style={{ 'cursor': 'pointer' }} className={`${style['table-container']} ${table.opened ? style['opened'] : style['closed']} ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? style['parent'] : style['notparent']}`} onClick={() => handleClick(table)} key={table['SVAROG_TABLES.OBJECT_ID']} id={table['SVAROG_TABLES.OBJECT_ID']}>
-          <div className={style['table-name']}><p>{table['SVAROG_TABLES.TABLE_NAME']}</p> <span>{table.opened ? icons.minus : icons.plus}</span></div>
-          {table.opened && <div className={`${style['field-container']} ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? style['has-parent'] : style['noparent']}`}>
+        return inputArr.map(table => <div style={{ 'cursor': 'pointer' }} className={`report-engine-table-container ${table.opened ? 'report-engine-opened' : 'report-engine-closed'} ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? 'report-engine-parent' : 'report-engine-notparent'}`} onClick={() => handleClick(table)} key={table['SVAROG_TABLES.OBJECT_ID']} id={table['SVAROG_TABLES.OBJECT_ID']}>
+          <div className={'report-engine-table-name'}><p>{table['SVAROG_TABLES.TABLE_NAME']}</p> <span>{table.opened ? icons.minus : icons.plus}</span></div>
+          {table.opened && <div className={`report-engine-field-container ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? 'report-engine-has-parent' : 'report-engine-noparent'}`}>
             {generateSideMenuChild(table)}
           </div>}
         </div>)
       } else {
-        return <div className={style['empty-search-container']}><p>{labelsManager.importLabel('no_tabels_found', 'report_engine', context)}</p></div>
+        return <div className={'report-engine-empty-search-container'}><p>{labelsManager.importLabel('no_tabels_found', 'report_engine', context)}</p></div>
       }
     } else {
-      return tables.map(table => <div style={{ 'cursor': 'pointer' }} className={`${style['table-container']} ${table.opened ? style['opened'] : style['closed']} ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? style['parent'] : style['notparent']}`} onClick={() => handleClick(table)} key={table['SVAROG_TABLES.OBJECT_ID']} id={table['SVAROG_TABLES.OBJECT_ID']}>
-        <div className={style['table-name']}><p>{table['SVAROG_TABLES.TABLE_NAME']}</p> <span>{table.opened ? icons.minus : icons.plus}</span></div>
-        {table.opened && <div className={`${style['field-container']} ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? style['has-parent'] : style['noparent']}`}>
+      return tables.map(table => <div style={{ 'cursor': 'pointer' }} className={`report-engine-table-container ${table.opened ? 'report-engine-opened' : 'report-engine-closed'} ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? 'report-engine-parent' : 'report-engine-notparent'}`} onClick={() => handleClick(table)} key={table['SVAROG_TABLES.OBJECT_ID']} id={table['SVAROG_TABLES.OBJECT_ID']}>
+        <div className={'report-engine-table-name'}><p>{table['SVAROG_TABLES.TABLE_NAME']}</p> <span>{table.opened ? icons.minus : icons.plus}</span></div>
+        {table.opened && <div className={`report-engine-field-container ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? 'report-engine-has-parent' : 'report-engine-noparent'}`}>
           {generateSideMenuChild(table)}
         </div>}
       </div>)
@@ -121,7 +120,7 @@ const SideMenu = (props, context) => {
   return (
     <>
       {loading && <Loading />}
-      <div className={style['search-div']}><span>{icons.search}</span><input placeholder={labelsManager.importLabel('enter_search_value', 'report_engine', context)} onChange={(e) => { onChange(e) }} type='string' /></div>
+      <div className={'report-engine-search-div'}><span>{icons.search}</span><input placeholder={labelsManager.importLabel('enter_search_value', 'report_engine', context)} onChange={(e) => { onChange(e) }} type='string' /></div>
       {generateSideMenu()}
     </>
   );

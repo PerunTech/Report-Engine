@@ -94,17 +94,17 @@ const ReportEngine = (context) => {
     setSelectedFields(uniqueObjArray)
   }
   return (
-    <div className={style['report-engine-main-container']}>
-      <div className={style['side-menu-container']}>
-        <button onClick={() => { history.goBack() }} className={style['btn-back']}><span>{icons.back}Back</span></button>
-        <div className={style['table-toggle-button']} onClick={() => toggleFunction()}>
+    <div className={'report-engine-main-container'}>
+      <div className={'report-engine-side-menu-container'}>
+        <button onClick={() => { history.goBack() }} className={'report-engine-btn-back'}><span>{icons.back}Back</span></button>
+        <div className={'report-engine-table-toggle-button'} onClick={() => toggleFunction()}>
           <p>Show {system ? "Analytics" : "System"}</p>
         </div>
         {system && <SideMenu handleFieldClick={handleFieldClick} />}
         {!system && <SideMenuAnalytics handleFieldClick={handleFieldClickAnalytics} />}
       </div>
 
-      {selectedFields.length > 0 && <div className={style['main-content-container']}>
+      {selectedFields.length > 0 && <div className={'report-engine-main-content-container'}>
         <MainContent isAnalytics={!system} selectedFields={selectedFields} removeFileClick={removeFileClick} />
       </div>}
     </div>

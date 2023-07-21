@@ -6,7 +6,6 @@ import {
   PropTypes,
   elements
 } from "perun-core";
-import style from "./../../assets/ReportEngine.module.css"
 import { icons } from "../../assets/svgHolder";
 import { downloadFile } from '../../assets/DownloadFile';
 const { useEffect, useState } = React
@@ -33,12 +32,12 @@ const MainContent = (props, context) => {
     if (props.isAnalytics) {
       key = 'KEY'
     }
-    let content = (<div className={`report-engine-class-for-scroll  ${style['main-field-container']}`}>
+    let content = (<div className={'report-engine-class-for-scroll report-engine-main-field-container'}>
       {props.selectedFields.map(field => {
         { tempArr.push({ field_name: field[`${key}`], field_type: field.FIELD_TYPE ? field.FIELD_TYPE : '', operator: 'equal' }) }
         let newobj = { ['field[`${key}`]']: {} }
         Object.assign(globalArr, newobj)
-        return <div className={`custom-select ${style['main-content-select']} ${style['main-field-one']} ${field.parent && style['has-parent']}`}>
+        return <div className={`custom-select  report-engine-main-content-select  report-engine-main-field-one ${field.parent && 'report-engine-has-parent'}`}>
           <p>{field[`${key}`]}</p>
 
         </div>
@@ -54,25 +53,25 @@ const MainContent = (props, context) => {
   }
   //generates the dropdown
   const generateMainContentTwo = () => {
-    let content = (<div className={style['main-field-container']}>
+    let content = (<div className={'report-engine-main-field-container'}>
       {globalArr.map(field => {
         switch (field.field_type) {
           case 'NUMERIC':
-            return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
+            return <select className={'custom-select report-engine-main-content-select'} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
               <option value={'equal'}>Equal</option>
               <option value={'less'}>Less</option>
               <option value={'greater'}>Greater</option>
               {props.isAnalytics && <option value={'sum'}>Sum</option>}
             </select>
           case 'NVARCHAR':
-            return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
+            return <select className={`custom-select report-engine-main-content-select`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
               <option value={'equal'}>Equal</option>
               <option value={'like'}>Like</option>
               <option value={'startsWith'}>Starts with</option>
               <option value={'endsWith'}>Ends with</option>
             </select>
           default:
-            return <select className={`custom-select ${style['main-content-select']}`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
+            return <select className={`custom-select report-engine-main-content-select`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
               <option value={'equal'}>Equal</option>
               <option value={'like'}>Like</option>
               <option value={'startsWith'}>Starts with</option>
@@ -86,10 +85,10 @@ const MainContent = (props, context) => {
   }
   //Used to generate the inputs 
   const generateMainContentThree = () => {
-    let content = (<div className={style['main-field-container']}>
+    let content = (<div className={'report-engine-main-field-container'}>
       {globalArr.map(field => {
-        return (<div className={style['input-container']}><input value={field.value && field.value} style={{ 'background': 'none' }}
-          className={`custom-select ${style['main-content-select']}`}
+        return (<div className={'report-engine-input-container'}><input value={field.value && field.value} style={{ 'background': 'none' }}
+          className={'custom-select report-engine-main-content-select'}
           onChange={(e) => onChange(e, 'input')} key={field.field_name} id={field.field_name} type={fieldType(field)} /> <span onClick={() => {
             props.removeFileClick(field)
             innerRemoveFunc(field)
@@ -163,14 +162,14 @@ const MainContent = (props, context) => {
   return (
     <>
       {loading && <Loading />}
-      <div className={style['mid-content-container']}>
-        <div className={style['mid-content']}>{mainContentOne}</div>
+      <div className={'report-engine-mid-content-container'}>
+        <div className={'report-engine-mid-content'}>{mainContentOne}</div>
 
-        <div className={style['mid-content']}>{mainContentTwo}</div>
-        <div className={style['mid-content']}>{mainContentThree}</div>
+        <div className={'report-engine-mid-content'}>{mainContentTwo}</div>
+        <div className={'report-engine-mid-content'}>{mainContentThree}</div>
       </div>
-      <div className={style['mid-content-btn-holder']}>
-        <button className={`btn-success btn_save_form ${style['btn-width']}`} onClick={() => getData()}>Generate Report</button>
+      <div className={'report-engine-mid-content-btn-holder'}>
+        <button className={'btn-success btn_save_form report-engine-btn-width'} onClick={() => getData()}>Generate Report</button>
       </div>
 
     </>

@@ -1,6 +1,5 @@
 import { React, MenuHolder, createHashHistory } from "perun-core";
 const { useState, useEffect } = React;
-import "../../assets/styles.css";
 import ReportEngine from '../ReportEngine';
 const Mainholder = (props) => {
   const [component, setComponent] = useState(undefined);

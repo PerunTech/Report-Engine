@@ -32,9 +32,9 @@ const SideMenuAnalytics = (props, context) => {
   }, [])
 
   const generateSideMenuAnalytics = () => {
-    return tables.map(table => <div style={{ 'cursor': 'pointer' }} className={`${style['table-container']} ${table.opened ? style['opened'] : style['closed']} ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? style['parent'] : style['notparent']}`} onClick={() => handleClick(table)} key={table['SVAROG_TABLES.OBJECT_ID']} id={table['SVAROG_TABLES.OBJECT_ID']}>
-      <div className={style['table-name']}><p>{table['OBJECT_NAME']}</p> <span>{table.opened ? icons.minus : icons.plus}</span></div>
-      {table.opened && <div className={`${style['field-container']}`}>
+    return tables.map(table => <div style={{ 'cursor': 'pointer' }} className={`'report-engine-table-container' ${table.opened ? 'report-engine-opened' : 'report-engine-closed'} ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? 'report-engine-parent' : 'report-engine-notparent'}`} onClick={() => handleClick(table)} key={table['SVAROG_TABLES.OBJECT_ID']} id={table['SVAROG_TABLES.OBJECT_ID']}>
+      <div className={'report-engine-table-name'}><p>{table['OBJECT_NAME']}</p> <span>{table.opened ? icons.minus : icons.plus}</span></div>
+      {table.opened && <div className={'report-engine-field-container'}>
         {generateSideMenuAnalyticsChild(table)}
       </div>}
     </div>)
