@@ -51,7 +51,7 @@ const SideMenu = (props, context) => {
           </div>}
         </div>)
       } else {
-        return <div className={'report-engine-empty-search-container'}><p>{labelsManager.importLabel('no_tabels_found', 'report_engine', context)}</p></div>
+        return <div className={'report-engine-empty-search-container'}><p>{labelsManager.importLabel('no_tables_found', 'report_engine', context)}</p></div>
       }
     } else {
       return tables.map(table => <div style={{ 'cursor': 'pointer' }} className={`report-engine-table-container ${table.opened ? 'report-engine-opened' : 'report-engine-closed'} ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? 'report-engine-parent' : 'report-engine-notparent'}`} onClick={() => handleClick(table)} key={table['SVAROG_TABLES.OBJECT_ID']} id={table['SVAROG_TABLES.OBJECT_ID']}>
