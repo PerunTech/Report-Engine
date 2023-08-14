@@ -19,8 +19,9 @@ const SideMenuAnalytics = (props, context) => {
     axios.get(`${window.server}/svarog-reporting/get/analytics/tables/${props.svSession}/`).then((res) => {
       res.data.forEach(data => {
         data.opened = false;
-        setLoading(false)
+
       })
+      setLoading(false)
       setTables(res.data)
     }).catch(err => {
       console.log(err.response)
