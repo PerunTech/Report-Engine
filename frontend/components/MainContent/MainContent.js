@@ -8,6 +8,7 @@ import {
 } from "perun-core";
 import { icons } from "../../assets/svgHolder";
 import { downloadFile } from '../../assets/DownloadFile';
+import { labelsManager } from "../../assets/LabelsExport";
 const { useEffect, useState } = React
 let globalArr = []
 const MainContent = (props, context) => {
