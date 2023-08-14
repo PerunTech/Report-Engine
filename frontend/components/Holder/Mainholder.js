@@ -1,15 +1,15 @@
-import { React, MenuHolder, createHashHistory } from "perun-core";
+import { React, PropTypes } from "perun-core";
 const { useState, useEffect } = React;
 import ReportEngine from '../ReportEngine';
-const Mainholder = (props) => {
+import { labelsManager } from "../../assets/LabelsExport";
+const Mainholder = (props, context) => {
   const [component, setComponent] = useState(undefined);
 
   useEffect(() => {
     assignComponentToRoute(props);
     if (document.getElementById("identificationScreen")) {
-      document.getElementById("identificationScreen").className =
-        "identificationScreen";
-      document.getElementById("identificationScreen").innerText = "report-engine";
+      document.getElementById("identificationScreen").className = "identificationScreen";
+      document.getElementById("identificationScreen").innerText = labelsManager.importLabel('report-engine', 'plugin', context);
     }
   }, []);
 
@@ -34,5 +34,9 @@ const Mainholder = (props) => {
     </>
   );
 };
+
+Mainholder.contextTypes = {
+  intl: PropTypes.object.isRequired
+}
 
 export default Mainholder;
