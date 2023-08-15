@@ -96,9 +96,9 @@ const ReportEngine = (props, context) => {
   return (
     <div className={'report-engine-main-container'}>
       <div className={'report-engine-side-menu-container'}>
-        <button onClick={() => { history.goBack() }} className={'report-engine-btn-back'}><span>{icons.back}{this.context.intl.formatMessage({ id: 'perun.plugin.report-engine-back', defaultMessage: 'perun.plugin.report-engine-back' })}</span></button>
+        <button onClick={() => { history.goBack() }} className={'report-engine-btn-back'}><span>{icons.back}{context.intl.formatMessage({ id: 'perun.plugin.report-engine-back', defaultMessage: 'perun.plugin.report-engine-back' })}</span></button>
         <div className={'report-engine-table-toggle-button'} onClick={() => toggleFunction()}>
-          <p>{this.context.intl.formatMessage({ id: 'perun.plugin.report-engine-show', defaultMessage: 'perun.plugin.report-engine-show' })} {system ? context.intl.formatMessage({ id: 'perun.plugin.report-engine-analytics', defaultMessage: 'perun.plugin.report-engine-analytics' }) : context.intl.formatMessage({ id: 'perun.plugin.report-engine-system', defaultMessage: 'perun.plugin.report-engine-system' })}</p>
+          <p>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-show', defaultMessage: 'perun.plugin.report-engine-show' })} {system ? context.intl.formatMessage({ id: 'perun.plugin.report-engine-analytics', defaultMessage: 'perun.plugin.report-engine-analytics' }) : context.intl.formatMessage({ id: 'perun.plugin.report-engine-system', defaultMessage: 'perun.plugin.report-engine-system' })}</p>
         </div>
         {system && <SideMenu handleFieldClick={handleFieldClick} />}
         {!system && <SideMenuAnalytics handleFieldClick={handleFieldClickAnalytics} />}
