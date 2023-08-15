@@ -9,7 +9,7 @@ import { labelsManager } from "../assets/LabelsExport"
 const { alertUser } = elements
 const history = createHashHistory();
 const { useState } = React
-const ReportEngine = (context) => {
+const ReportEngine = (props, context) => {
   const [selectedFields, setSelectedFields] = useState([])
   const [parentActive, setParentActive] = useState(false)
   const [parentName, setParentName] = useState('')
