@@ -59,24 +59,24 @@ const MainContent = (props, context) => {
         switch (field.field_type) {
           case 'NUMERIC':
             return <select className={'custom-select report-engine-main-content-select'} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
-              <option value={'equal'}>Equal</option>
-              <option value={'less'}>Less</option>
-              <option value={'greater'}>Greater</option>
-              {props.isAnalytics && <option value={'sum'}>Sum</option>}
+              <option value={'equal'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-equal', defaultMessage: 'perun.plugin.report-engine-equal' })}</option>
+              <option value={'less'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-less', defaultMessage: 'perun.plugin.report-engine-less' })}</option>
+              <option value={'greater'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-greater', defaultMessage: 'perun.plugin.report-engine-greater' })}</option>
+              {props.isAnalytics && <option value={'sum'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-sum', defaultMessage: 'perun.plugin.report-engine-sum' })}</option>}
             </select>
           case 'NVARCHAR':
             return <select className={`custom-select report-engine-main-content-select`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
-              <option value={'equal'}>Equal</option>
-              <option value={'like'}>Like</option>
-              <option value={'startsWith'}>Starts with</option>
-              <option value={'endsWith'}>Ends with</option>
+              <option value={'equal'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-equal', defaultMessage: 'perun.plugin.report-engine-equal' })}</option>
+              <option value={'like'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-like', defaultMessage: 'perun.plugin.report-engine-like' })}</option>
+              <option value={'startsWith'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-start', defaultMessage: 'perun.plugin.report-engine-start' })}</option>
+              <option value={'endsWith'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-end', defaultMessage: 'perun.plugin.report-engine-end' })}</option>
             </select>
           default:
             return <select className={`custom-select report-engine-main-content-select`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
-              <option value={'equal'}>Equal</option>
-              <option value={'like'}>Like</option>
-              <option value={'startsWith'}>Starts with</option>
-              <option value={'endsWith'}>Ends with</option>
+              <option value={'equal'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-equal', defaultMessage: 'perun.plugin.report-engine-equal' })}</option>
+              <option value={'like'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-like', defaultMessage: 'perun.plugin.report-engine-like' })}</option>
+              <option value={'startsWith'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-start', defaultMessage: 'perun.plugin.report-engine-start' })}</option>
+              <option value={'endsWith'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-end', defaultMessage: 'perun.plugin.report-engine-end' })}</option>
             </select>
         }
 
@@ -170,7 +170,7 @@ const MainContent = (props, context) => {
         <div className={'report-engine-mid-content'}>{mainContentThree}</div>
       </div>
       <div className={'report-engine-mid-content-btn-holder'}>
-        <button className={'btn-success btn_save_form report-engine-btn-width'} onClick={() => getData()}>Generate Report</button>
+        <button className={'btn-success btn_save_form report-engine-btn-width'} onClick={() => getData()}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-generate-report', defaultMessage: 'perun.plugin.report-engine-generate-report' })}</button>
       </div>
 
     </>
