@@ -1,7 +1,7 @@
 export const schema = {
     type: 'object',
     properties: {
-        multipleCheckboxes: {
+        aggregateFunctions: {
             type: 'array',
             title: 'Aggregate functions',
             items: {
@@ -20,7 +20,7 @@ export const schema = {
 };
 
 export const uiSchema = {
-    multipleCheckboxes: {
+    aggregateFunctions: {
         'ui:widget': 'checkboxes',
     }
 };

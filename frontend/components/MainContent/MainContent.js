@@ -22,8 +22,6 @@ const MainContent = (props, context) => {
   const [formData, setFormData] = useState(undefined)
   const [loading, setLoading] = useState(false)
   const { alertUser } = elements
-  const schemaForm = schema;
-  const uiSchemaForm = uiSchema
   useEffect(() => {
     generateMainContentOne()
   }, [props.selectedFields])
@@ -156,7 +154,7 @@ const MainContent = (props, context) => {
   const getData = () => {
 
     if (formData) {
-      globalArr.push({ aggregate: formData.multipleCheckboxes })
+      globalArr.push({ aggregate: formData.aggregateFunctions })
     }
 
     setLoading(true)
@@ -196,8 +194,8 @@ const MainContent = (props, context) => {
             id='functions'
             key='functions'
             validator={validator}
-            schema={schemaForm}
-            uiSchema={uiSchemaForm}
+            schema={schema}
+            uiSchema={uiSchema}
             onChange={onClickCheckbox}
           >
             <></>
