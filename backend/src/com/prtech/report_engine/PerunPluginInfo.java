@@ -16,7 +16,7 @@ public class PerunPluginInfo implements IPerunPlugin {
 	@Override
 	public int getVersion() {
 		// TODO Auto-generated method stub
-		return 3;
+		return 1;
 	}
 
 	@Override
