@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.prtech.mk/iacs_custom/report-engine.git"
+    "url": "https://gitlab.prtech.mk/svarog4/report-engine.git"
   },
   "dependencies": {
     "perun-core": "git+https://git@gitlab.prtech.mk/svarog4/perun-core#dev"

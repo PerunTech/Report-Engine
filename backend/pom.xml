@@ -105,4 +105,5 @@
 			<version>[4.0.0-SNAPSHOT,5.0.0)</version>
 			<scope>provided</scope>
 		</dependency>
+	</dependencies>
 </project>
