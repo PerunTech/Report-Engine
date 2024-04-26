@@ -42,7 +42,7 @@ after_script:
     - rm -rf node_modules
     - pnpm install
     - rm -rf backend/www/*.js
-    - pnpm run build
+    - pnpm run build-dev
     - cd backend
     - ls -al www/
     - pwd
@@ -66,4 +66,3 @@ after_script:
     - mvn clean compile deploy -DskipTests
   only:
     - master
-    - dev
