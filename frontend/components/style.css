@@ -1,0 +1,17 @@
+.report-engine-checkbox {
+    position: relative;
+    right: 550px;
+
+}
+
+.report-engine-checkbox .checkboxes {
+    display: grid;
+    grid-template-columns: 20%20%20%20%20%;
+    grid-gap: 25px;
+    align-items: flex-start;
+
+}
+
+.report-engine-mid-content-btn-holder .report-engine-btn-width {
+    position: absolute;
+}
