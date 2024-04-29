@@ -4,17 +4,22 @@ import {
   axios,
   Loading,
   PropTypes,
-  elements
+  elements,
+  Form,
+  validator
 } from "perun-core";
 import { icons } from "../../assets/svgHolder";
 import { downloadFile } from '../../assets/DownloadFile';
 import { labelsManager } from "../../assets/LabelsExport";
+import { schema, uiSchema } from "../AggregateFormSchema";
+import "../style.css"
 const { useEffect, useState } = React
 let globalArr = []
 const MainContent = (props, context) => {
   const [mainContentOne, setMainContnetOne] = useState(undefined)
   const [mainContentTwo, setMainContnetTwo] = useState(undefined)
   const [mainContentThree, setMainContnetThree] = useState(undefined)
+  const [formData, setFormData] = useState(undefined)
   const [loading, setLoading] = useState(false)
   const { alertUser } = elements
   useEffect(() => {
@@ -52,6 +57,8 @@ const MainContent = (props, context) => {
     generateMainContentThree()
     generateMainContentTwo()
   }
+
+
   //generates the dropdown
   const generateMainContentTwo = () => {
     let content = (<div className={'report-engine-main-field-container'}>
@@ -139,11 +146,17 @@ const MainContent = (props, context) => {
       }
     })
   }
+
+  const onClickCheckbox = (e) => {
+    setFormData(e.formData)
+
+  }
+
   const getData = () => {
+
     setLoading(true)
     let url = window.server + `/svarog-reporting/get/xls/${props.svSession}`
-
-    let data = { 'params': globalArr }
+    let data = { 'params': [globalArr, { aggregates: formData.aggregateFunctions }] }
     axios({
       method: "post",
       data: JSON.stringify(data),
@@ -160,6 +173,7 @@ const MainContent = (props, context) => {
       alertUser(true, 'error', labelsManager.importLabel('error_occurred_generate', 'report_engine', context))
     })
   }
+
   return (
     <>
       {loading && <Loading />}
@@ -169,7 +183,20 @@ const MainContent = (props, context) => {
         <div className={'report-engine-mid-content'}>{mainContentTwo}</div>
         <div className={'report-engine-mid-content'}>{mainContentThree}</div>
       </div>
+
       <div className={'report-engine-mid-content-btn-holder'}>
+        <div class='report-engine-checkbox'>
+          <Form
+            id='functions'
+            key='functions'
+            validator={validator}
+            schema={schema}
+            uiSchema={uiSchema}
+            onChange={onClickCheckbox}
+          >
+            <></>
+          </Form>
+        </div>
         <button className={'btn-success btn_save_form report-engine-btn-width'} onClick={() => getData()}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-generate-report', defaultMessage: 'perun.plugin.report-engine-generate-report' })}</button>
       </div>
 
