@@ -11,7 +11,7 @@ import {
 import { icons } from "../../assets/svgHolder";
 import { downloadFile } from '../../assets/DownloadFile';
 import { labelsManager } from "../../assets/LabelsExport";
-import { schema, uiSchema } from "../AggregateFunctions";
+import { schema, uiSchema } from "../AggregateFormSchema";
 import "../style.css"
 const { useEffect, useState } = React
 let globalArr = []
@@ -154,16 +154,9 @@ const MainContent = (props, context) => {
 
   const getData = () => {
 
-    if (formData) {
-      const aggregatesParams = { aggregates: formData.aggregateFunctions };
-      globalArr = [...globalArr.filter(item => !item.aggregates), aggregatesParams];
-    }
-
-
     setLoading(true)
     let url = window.server + `/svarog-reporting/get/xls/${props.svSession}`
-
-    let data = { 'params': globalArr }
+    let data = { 'params': { globalArr, aggregates: formData.aggregateFunctions } }
     axios({
       method: "post",
       data: JSON.stringify(data),
