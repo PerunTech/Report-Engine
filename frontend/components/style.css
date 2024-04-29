@@ -1,17 +1,59 @@
 .report-engine-checkbox {
-    position: relative;
-    right: 550px;
+    width: 80%;
+    margin: 0;
+    margin-top: 24px;
+}
 
+
+.report-engine-checkbox .checkbox label,
+span {
+    margin-left: 5px;
+    overflow: hidden;
+}
+
+
+.report-engine-checkbox label span span {
+    position: relative;
+    bottom: 3px
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-block;
+    width: 1.3rem;
+    height: 1.3rem;
+    border: 0.2rem solid green;
+    border-radius: 0.2rem;
+    cursor: pointer;
+    position: relative;
+}
+
+input[type="checkbox"]::before {
+    content: '\2714';
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: transparent;
+    transition: transform 0.2s ease-in-out;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+input[type="checkbox"]:checked::before {
+    color: green;
 }
 
 .report-engine-checkbox .checkboxes {
     display: grid;
-    grid-template-columns: 20% 20% 20% 20% 20%;
-    grid-gap: 25px;
-    align-items: flex-start;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    justify-items: center;
+    width: 700px;
 
 }
 
-.report-engine-mid-content-btn-holder .report-engine-btn-width {
-    position: absolute;
+.report-engine-mid-content-btn-holder {
+    height: 70px;
+    overflow: hidden;
 }

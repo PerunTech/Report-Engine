@@ -3,7 +3,7 @@ export const schema = {
     properties: {
         aggregateFunctions: {
             type: 'array',
-            title: 'Aggregate functions',
+            title: ' ',
             items: {
                 type: 'string',
                 enum: [
@@ -21,7 +21,9 @@ export const schema = {
 
 export const uiSchema = {
     aggregateFunctions: {
+
         'ui:widget': 'checkboxes',
+
     }
 };
 

@@ -149,13 +149,16 @@ const MainContent = (props, context) => {
 
   const onClickCheckbox = (e) => {
     setFormData(e.formData)
+
   }
 
   const getData = () => {
 
     if (formData) {
-      globalArr.push({ aggregate: formData.aggregateFunctions })
+      const aggregatesParams = { aggregates: formData.aggregateFunctions };
+      globalArr = [...globalArr.filter(item => !item.aggregates), aggregatesParams];
     }
+
 
     setLoading(true)
     let url = window.server + `/svarog-reporting/get/xls/${props.svSession}`
