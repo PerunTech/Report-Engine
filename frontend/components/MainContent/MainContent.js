@@ -156,7 +156,7 @@ const MainContent = (props, context) => {
 
     setLoading(true)
     let url = window.server + `/svarog-reporting/get/xls/${props.svSession}`
-    let data = { 'params': { globalArr, aggregates: formData.aggregateFunctions } }
+    let data = { 'params': [globalArr, { aggregates: formData.aggregateFunctions }] }
     axios({
       method: "post",
       data: JSON.stringify(data),
