@@ -97,7 +97,7 @@ const MainContent = (props, context) => {
       {globalArr.map(field => {
         if (field?.dropDownOptions?.length > 0) {
           return (<div className={'report-engine-input-container'}>
-            <select onChange={(e) => onChange(e, 'drop-down')} name={field.field_name} id={field.field_name}>
+            <select className={`custom-select report-engine-main-content-select`} onChange={(e) => onChange(e, 'drop-down')} name={field.field_name} id={field.field_name}>
               {field.dropDownOptions.map((opt, i) =>
                 <option key={`${field.field_name}/${opt.id}`} selected={i === 0 ? true : false} id={`${field.field_name}/${opt.id}`} value={opt.value}>{opt.text}</option>
               )}
@@ -121,11 +121,11 @@ const MainContent = (props, context) => {
   }
 
   const removeAfterSlash = (str) => {
-    const slashIndex = str.indexOf('/');
-    if (slashIndex !== -1) { // Check if slash exists in the string
-      return str.substring(0, slashIndex);
+    const symbol = str.indexOf('/');
+    if (symbol !== -1) {
+      return str.substring(0, symbol);
     }
-    return str; // Return the original string if no slash is found
+    return str;
   }
 
   //basic onchange function to handle input/select changes
@@ -181,20 +181,17 @@ const MainContent = (props, context) => {
   }
 
   const removeDropDownOptions = (arr) => {
-    // Use map to create a new array with modified objects
     const modifiedArray = arr.map(obj => {
-      // Destructure the object and remove the dropDownOptions property
       const { dropDownOptions, ...rest } = obj;
-      // Return the modified object
       return rest;
     });
-    // Return the new array
     return modifiedArray;
   }
 
 
   const getData = () => {
     let temp = JSON.parse(JSON.stringify(globalArr))
+    temp = setValueFunc(temp)
     temp = removeDropDownOptions(temp)
     setLoading(true)
     let url = window.server + `/svarog-reporting/get/xls/${props.svSession}`
@@ -215,6 +212,15 @@ const MainContent = (props, context) => {
       setLoading(false)
       alertUser(true, 'error', labelsManager.importLabel('error_occurred_generate', 'report_engine', context))
     })
+  }
+
+  const setValueFunc = (arr) => {
+    arr.forEach(obj => {
+      if (obj.dropDownOptions && obj.dropDownOptions.length > 0 && !obj.value) {
+        obj.value = obj.dropDownOptions[0].value;
+      }
+    });
+    return arr;
   }
 
   return (
