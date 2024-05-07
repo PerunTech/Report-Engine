@@ -4,17 +4,10 @@
     margin-top: 24px;
 }
 
-
-.report-engine-checkbox .checkbox label,
-span {
-    margin-left: 5px;
-    overflow: hidden;
-}
-
-
 .report-engine-checkbox label span span {
     position: relative;
-    bottom: 3px
+    bottom: 3px;
+    margin-left: 5px;
 }
 
 .report-engine-checkbox input[type="checkbox"] {
