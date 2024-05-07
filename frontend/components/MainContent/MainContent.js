@@ -151,7 +151,6 @@ const MainContent = (props, context) => {
     setFormData(e.formData)
 
   }
-
   const getData = () => {
 
     setLoading(true)
@@ -193,6 +192,7 @@ const MainContent = (props, context) => {
             schema={schema}
             uiSchema={uiSchema}
             onChange={onClickCheckbox}
+            formData={formData}
           >
             <></>
           </Form>
