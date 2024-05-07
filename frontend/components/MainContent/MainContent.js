@@ -40,7 +40,7 @@ const MainContent = (props, context) => {
     }
     let content = (<div className={'report-engine-class-for-scroll report-engine-main-field-container'}>
       {props.selectedFields.map(field => {
-        { tempArr.push({ field_name: field[`${key}`], field_type: field.FIELD_TYPE ? field.FIELD_TYPE : '', operator: 'equal' }) }
+        { tempArr.push({ field_name: field[`${key}`], field_type: field.FIELD_TYPE ? field.FIELD_TYPE : '', operator: 'equal', dropDownOptions: field.formatterOptions ? field.formatterOptions : [] }) }
         let newobj = { ['field[`${key}`]']: {} }
         Object.assign(globalArr, newobj)
         return <div className={`custom-select  report-engine-main-content-select  report-engine-main-field-one ${field.parent && 'report-engine-has-parent'}`}>
@@ -95,16 +95,39 @@ const MainContent = (props, context) => {
   const generateMainContentThree = () => {
     let content = (<div className={'report-engine-main-field-container'}>
       {globalArr.map(field => {
-        return (<div className={'report-engine-input-container'}><input value={field.value && field.value} style={{ 'background': 'none' }}
-          className={'custom-select report-engine-main-content-select'}
-          onChange={(e) => onChange(e, 'input')} key={field.field_name} id={field.field_name} type={fieldType(field)} /> <span onClick={() => {
-            props.removeFileClick(field)
-            innerRemoveFunc(field)
-          }}>{icons.delete}</span> </div>)
+        if (field?.dropDownOptions?.length > 0) {
+          return (<div className={'report-engine-input-container'}>
+            <select className={`custom-select report-engine-main-content-select`} onChange={(e) => onChange(e, 'drop-down')} name={field.field_name} id={field.field_name}>
+              {field.dropDownOptions.map((opt, i) =>
+                <option key={`${field.field_name}/${opt.id}`} selected={i === 0 ? true : false} id={`${field.field_name}/${opt.id}`} value={opt.value}>{opt.text}</option>
+              )}
+            </select>
+            <span onClick={() => {
+              props.removeFileClick(field)
+              innerRemoveFunc(field)
+            }}>{icons.delete}</span>
+          </div>)
+        } else {
+          return (<div className={'report-engine-input-container'}><input value={field.value && field.value} style={{ 'background': 'none' }}
+            className={'custom-select report-engine-main-content-select'}
+            onChange={(e) => onChange(e, 'input')} key={field.field_name} id={field.field_name} type={fieldType(field)} /> <span onClick={() => {
+              props.removeFileClick(field)
+              innerRemoveFunc(field)
+            }}>{icons.delete}</span> </div>)
+        }
       })}
-    </div>)
+    </div >)
     setMainContnetThree(content)
   }
+
+  const removeAfterSlash = (str) => {
+    const symbol = str.indexOf('/');
+    if (symbol !== -1) {
+      return str.substring(0, symbol);
+    }
+    return str;
+  }
+
   //basic onchange function to handle input/select changes
   const onChange = (e, inputType) => {
     let tempArr = globalArr
@@ -113,7 +136,12 @@ const MainContent = (props, context) => {
         if (field.field_name === e.target.id) {
           field.value = e.target.value
         }
-      } else {
+      } else if (inputType === 'drop-down') {
+        if (field.field_name === removeAfterSlash(e.target[e.target.selectedIndex].id)) {
+          field.value = e.target.value
+        }
+      }
+      else {
         if (field.field_name === e.target.id) {
           field.operator = e.target.value
         }
@@ -151,11 +179,24 @@ const MainContent = (props, context) => {
     setFormData(e.formData)
 
   }
-  const getData = () => {
 
+  const removeDropDownOptions = (arr) => {
+    const modifiedArray = arr.map(obj => {
+      const { dropDownOptions, ...rest } = obj;
+      return rest;
+    });
+    return modifiedArray;
+  }
+
+
+  const getData = () => {
+    let temp = JSON.parse(JSON.stringify(globalArr))
+    temp = setValueFunc(temp)
+    temp = removeDropDownOptions(temp)
     setLoading(true)
     let url = window.server + `/svarog-reporting/get/xls/${props.svSession}`
-    let data = { 'params': [globalArr, { aggregates: formData.aggregateFunctions }] }
+    let data = { 'params': [temp, { aggregates: formData.aggregateFunctions }] }
+
     axios({
       method: "post",
       data: JSON.stringify(data),
@@ -171,6 +212,15 @@ const MainContent = (props, context) => {
       setLoading(false)
       alertUser(true, 'error', labelsManager.importLabel('error_occurred_generate', 'report_engine', context))
     })
+  }
+
+  const setValueFunc = (arr) => {
+    arr.forEach(obj => {
+      if (obj.dropDownOptions && obj.dropDownOptions.length > 0 && !obj.value) {
+        obj.value = obj.dropDownOptions[0].value;
+      }
+    });
+    return arr;
   }
 
   return (
