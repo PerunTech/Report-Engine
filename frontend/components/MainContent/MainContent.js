@@ -210,7 +210,7 @@ const MainContent = (props, context) => {
     }).catch(err => {
       console.error(err)
       setLoading(false)
-      alertUser(true, 'error', labelsManager.importLabel('error_occurred_generate', 'report_engine', context))
+      alertUser(true, 'error', err.response?.data?.title || '', err.response?.data?.message || '');
     })
   }
 
