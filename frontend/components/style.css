@@ -8,6 +8,7 @@
     position: relative;
     bottom: 3px;
     margin-left: 5px;
+    cursor: pointer;
 }
 
 .report-engine-checkbox input[type="checkbox"] {
