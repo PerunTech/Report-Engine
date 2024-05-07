@@ -242,6 +242,7 @@ const MainContent = (props, context) => {
             schema={schema}
             uiSchema={uiSchema}
             onChange={onClickCheckbox}
+            formData={formData}
           >
             <></>
           </Form>
