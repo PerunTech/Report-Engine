@@ -13,7 +13,7 @@ const ReportEngine = (props, context) => {
   const [selectedFields, setSelectedFields] = useState([])
   const [parentActive, setParentActive] = useState(false)
   const [parentName, setParentName] = useState('')
-  const [system, setShowSystem] = useState(false)
+  const [system, setShowSystem] = useState(true)
   const handleFieldClick = (e, field, table) => {
     let innerField = field
     if (table['SVAROG_TABLES.PARENT_ID']) {
