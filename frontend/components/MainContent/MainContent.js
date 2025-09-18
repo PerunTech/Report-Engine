@@ -207,10 +207,16 @@ const MainContent = (props, context) => {
       downloadFile(res, 'file', () => {
         setLoading(false)
       })
-    }).catch(err => {
+    }).catch(async err => {
       console.error(err)
       setLoading(false)
-      alertUser(true, 'error', err.response?.data?.title || '', err.response?.data?.message || '');
+      if (err.response && err.response.data) {
+        // Convert the Blob to text
+        const text = await err.response.data.text();
+        // Parse the text to JSON
+        const jsonResponse = JSON.parse(text);
+        alertUser(true, 'error', jsonResponse?.title || '', jsonResponse?.message || '');
+      }
     })
   }
 
