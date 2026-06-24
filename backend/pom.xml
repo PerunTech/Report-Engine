@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.peruntech</groupId>
 	<artifactId>report-engine</artifactId>
-	<version>4.0.1-SNAPSHOT</version>
+	<version>4.0.2-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>report-engine</name>
 	<description>Report Engine bundle for the Svarog Business Platform</description>
