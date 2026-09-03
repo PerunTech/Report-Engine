@@ -1,1 +1,1 @@
-window.server='http://192.168.9.73:9090/services'
+window.server = 'http://192.168.100.162:8110/services'

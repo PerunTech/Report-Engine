@@ -9,21 +9,20 @@ import {
   validator
 } from "perun-core";
 import { icons } from "../../assets/svgHolder";
+import { typeBadgeClass } from "../../assets/fieldTypes";
 import { downloadFile } from '../../assets/DownloadFile';
 import { labelsManager } from "../../assets/LabelsExport";
 import { schema, uiSchema } from "../AggregateFormSchema";
-import "../style.css"
 const { useEffect, useState } = React
 let globalArr = []
 const MainContent = (props, context) => {
-  const [mainContentOne, setMainContnetOne] = useState(undefined)
-  const [mainContentTwo, setMainContnetTwo] = useState(undefined)
-  const [mainContentThree, setMainContnetThree] = useState(undefined)
+  //globalArr stays the source of truth for the criteria; criteria is its render mirror
+  const [criteria, setCriteria] = useState([])
   const [formData, setFormData] = useState(undefined)
   const [loading, setLoading] = useState(false)
   const { alertUser } = elements
   useEffect(() => {
-    generateMainContentOne()
+    syncCriteria()
   }, [props.selectedFields])
 
   useEffect(() => {
@@ -31,124 +30,66 @@ const MainContent = (props, context) => {
       globalArr = []
     }
   }, [])
-  //generates  the table names and creates a basic clone array of objects for the formData
-  const generateMainContentOne = () => {
-    let tempArr = globalArr
+
+  const publish = () => setCriteria([...globalArr])
+
+  //merges the fields picked in the side menu into the criteria list, keeping
+  //the operator and value already entered for the ones that were there before
+  const syncCriteria = () => {
     let key = 'key'
     if (props.isAnalytics) {
       key = 'KEY'
     }
-    let content = (<div className={'report-engine-class-for-scroll report-engine-main-field-container'}>
-      {props.selectedFields.map(field => {
-        { tempArr.push({ field_name: field[`${key}`], field_type: field.FIELD_TYPE ? field.FIELD_TYPE : '', operator: 'equal', dropDownOptions: field.formatterOptions ? field.formatterOptions : [] }) }
-        let newobj = { ['field[`${key}`]']: {} }
-        Object.assign(globalArr, newobj)
-        return <div className={`custom-select  report-engine-main-content-select  report-engine-main-field-one ${field.parent && 'report-engine-has-parent'}`}>
-          <p>{field[`${key}`]}</p>
-
-        </div>
-      })}
-    </div>)
-    setMainContnetOne(content)
+    let tempArr = globalArr
+    props.selectedFields.forEach(field => {
+      tempArr.push({
+        field_name: field[`${key}`],
+        field_type: field.FIELD_TYPE ? field.FIELD_TYPE : '',
+        operator: 'equal',
+        dropDownOptions: field.formatterOptions ? field.formatterOptions : [],
+        field_label: field['FIELD_NAME'] ? field['FIELD_NAME'] : field[`${key}`],
+        table_name: field['TABLE_NAME'] ? field['TABLE_NAME'] : '',
+        parent: field.parent ? true : false
+      })
+    })
     tempArr = tempArr.reverse()
     let uniqueObjArray = [...new Map(tempArr.map((item) => [item["field_name"], item])).values()];
-    globalArr = uniqueObjArray
-    globalArr = globalArr.reverse()
-    generateMainContentThree()
-    generateMainContentTwo()
+    globalArr = uniqueObjArray.reverse()
+    publish()
   }
 
-
-  //generates the dropdown
-  const generateMainContentTwo = () => {
-    let content = (<div className={'report-engine-main-field-container'}>
-      {globalArr.map(field => {
-        switch (field.field_type) {
-          case 'NUMERIC':
-            return <select className={'custom-select report-engine-main-content-select'} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
-              <option value={'equal'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-equal', defaultMessage: 'perun.plugin.report-engine-equal' })}</option>
-              <option value={'less'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-less', defaultMessage: 'perun.plugin.report-engine-less' })}</option>
-              <option value={'greater'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-greater', defaultMessage: 'perun.plugin.report-engine-greater' })}</option>
-              {props.isAnalytics && <option value={'sum'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-sum', defaultMessage: 'perun.plugin.report-engine-sum' })}</option>}
-            </select>
-          case 'NVARCHAR':
-            return <select className={`custom-select report-engine-main-content-select`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
-              <option value={'equal'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-equal', defaultMessage: 'perun.plugin.report-engine-equal' })}</option>
-              <option value={'like'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-like', defaultMessage: 'perun.plugin.report-engine-like' })}</option>
-              <option value={'startsWith'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-start', defaultMessage: 'perun.plugin.report-engine-start' })}</option>
-              <option value={'endsWith'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-end', defaultMessage: 'perun.plugin.report-engine-end' })}</option>
-            </select>
-          default:
-            return <select className={`custom-select report-engine-main-content-select`} onChange={(e) => onChange(e, 'operator')} id={field.field_name} key={field.field_name}>
-              <option value={'equal'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-equal', defaultMessage: 'perun.plugin.report-engine-equal' })}</option>
-              <option value={'like'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-like', defaultMessage: 'perun.plugin.report-engine-like' })}</option>
-              <option value={'startsWith'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-start', defaultMessage: 'perun.plugin.report-engine-start' })}</option>
-              <option value={'endsWith'}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-end', defaultMessage: 'perun.plugin.report-engine-end' })}</option>
-            </select>
-        }
-
-      })}
-    </div>)
-    setMainContnetTwo(content)
-  }
-  //Used to generate the inputs 
-  const generateMainContentThree = () => {
-    let content = (<div className={'report-engine-main-field-container'}>
-      {globalArr.map(field => {
-        if (field?.dropDownOptions?.length > 0) {
-          return (<div className={'report-engine-input-container'}>
-            <select className={`custom-select report-engine-main-content-select`} onChange={(e) => onChange(e, 'drop-down')} name={field.field_name} id={field.field_name}>
-              {field.dropDownOptions.map((opt, i) =>
-                <option key={`${field.field_name}/${opt.id}`} selected={i === 0 ? true : false} id={`${field.field_name}/${opt.id}`} value={opt.value}>{opt.text}</option>
-              )}
-            </select>
-            <span onClick={() => {
-              props.removeFileClick(field)
-              innerRemoveFunc(field)
-            }}>{icons.delete}</span>
-          </div>)
-        } else {
-          return (<div className={'report-engine-input-container'}><input value={field.value && field.value} style={{ 'background': 'none' }}
-            className={'custom-select report-engine-main-content-select'}
-            onChange={(e) => onChange(e, 'input')} key={field.field_name} id={field.field_name} type={fieldType(field)} /> <span onClick={() => {
-              props.removeFileClick(field)
-              innerRemoveFunc(field)
-            }}>{icons.delete}</span> </div>)
-        }
-      })}
-    </div >)
-    setMainContnetThree(content)
-  }
-
-  const removeAfterSlash = (str) => {
-    const symbol = str.indexOf('/');
-    if (symbol !== -1) {
-      return str.substring(0, symbol);
+  const operatorOptions = (field) => {
+    switch (field.field_type) {
+      case 'NUMERIC':
+        return [
+          { value: 'equal', id: 'perun.plugin.report-engine-equal' },
+          { value: 'less', id: 'perun.plugin.report-engine-less' },
+          { value: 'greater', id: 'perun.plugin.report-engine-greater' },
+          ...(props.isAnalytics ? [{ value: 'sum', id: 'perun.plugin.report-engine-sum' }] : [])
+        ]
+      default:
+        return [
+          { value: 'equal', id: 'perun.plugin.report-engine-equal' },
+          { value: 'like', id: 'perun.plugin.report-engine-like' },
+          { value: 'startsWith', id: 'perun.plugin.report-engine-start' },
+          { value: 'endsWith', id: 'perun.plugin.report-engine-end' }
+        ]
     }
-    return str;
   }
 
   //basic onchange function to handle input/select changes
   const onChange = (e, inputType) => {
-    let tempArr = globalArr
-    tempArr.forEach(field => {
-      if (inputType === 'input') {
-        if (field.field_name === e.target.id) {
-          field.value = e.target.value
-        }
-      } else if (inputType === 'drop-down') {
-        if (field.field_name === removeAfterSlash(e.target[e.target.selectedIndex].id)) {
-          field.value = e.target.value
-        }
-      }
-      else {
-        if (field.field_name === e.target.id) {
+    const fieldName = e.target.dataset.field
+    globalArr.forEach(field => {
+      if (field.field_name === fieldName) {
+        if (inputType === 'operator') {
           field.operator = e.target.value
+        } else {
+          field.value = e.target.value
         }
       }
     })
-    globalArr = tempArr
-    generateMainContentThree()
+    publish()
   }
 
   const fieldType = (field) => {
@@ -157,11 +98,8 @@ const MainContent = (props, context) => {
       case 'NUMERIC':
         fieldType = 'number';
         break;
-      case 'NVARCHAR':
-        fieldType = 'string';
-        break;
       default:
-        fieldType = 'string';
+        fieldType = 'text';
 
     }
     return fieldType
@@ -173,6 +111,12 @@ const MainContent = (props, context) => {
         globalArr.splice(i, 1)
       }
     })
+    publish()
+  }
+
+  const removeCriterion = (field) => {
+    props.removeFileClick(field)
+    innerRemoveFunc(field)
   }
 
   const onClickCheckbox = (e) => {
@@ -180,22 +124,25 @@ const MainContent = (props, context) => {
 
   }
 
-  const removeDropDownOptions = (arr) => {
-    const modifiedArray = arr.map(obj => {
-      const { dropDownOptions, ...rest } = obj;
-      return rest;
-    });
-    return modifiedArray;
+  //only the four keys the reporting service expects ever leave the browser
+  const toPayload = (arr) => {
+    return arr.map(field => ({
+      field_name: field.field_name,
+      field_type: field.field_type,
+      operator: field.operator,
+      value: field.value
+    }))
   }
 
 
   const getData = () => {
     let temp = JSON.parse(JSON.stringify(globalArr))
     temp = setValueFunc(temp)
-    temp = removeDropDownOptions(temp)
+    temp = toPayload(temp)
     setLoading(true)
     let url = window.server + `/svarog-reporting/get/xls/${props.svSession}`
-    let data = { 'params': [temp, { aggregates: formData.aggregateFunctions }] }
+    let aggregates = formData && formData.aggregateFunctions ? formData.aggregateFunctions : []
+    let data = { 'params': [temp, { aggregates: aggregates }] }
 
     axios({
       method: "post",
@@ -229,18 +176,66 @@ const MainContent = (props, context) => {
     return arr;
   }
 
+  const renderValueControl = (field) => {
+    if (field?.dropDownOptions?.length > 0) {
+      const value = field.value !== undefined ? field.value : field.dropDownOptions[0].value
+      return (
+        <select className={'re-select'} data-field={field.field_name} id={`re-value-${field.field_name}`}
+          value={value} onChange={(e) => onChange(e, 'value')}>
+          {field.dropDownOptions.map(opt =>
+            <option key={`${field.field_name}/${opt.id}`} value={opt.value}>{opt.text}</option>
+          )}
+        </select>
+      )
+    }
+    return (
+      <input className={'re-input'} data-field={field.field_name} id={`re-value-${field.field_name}`}
+        type={fieldType(field)} value={field.value !== undefined ? field.value : ''}
+        placeholder={labelsManager.importLabel('value', 'report_engine', context)}
+        onChange={(e) => onChange(e, 'value')} />
+    )
+  }
+
   return (
     <>
       {loading && <Loading />}
-      <div className={'report-engine-mid-content-container'}>
-        <div className={'report-engine-mid-content'}>{mainContentOne}</div>
-
-        <div className={'report-engine-mid-content'}>{mainContentTwo}</div>
-        <div className={'report-engine-mid-content'}>{mainContentThree}</div>
+      <div className={'re-criteria'}>
+        <div className={'re-criteria-head'}>
+          <span>{labelsManager.importLabel('field', 'report_engine', context)}</span>
+          <span>{labelsManager.importLabel('operator', 'report_engine', context)}</span>
+          <span>{labelsManager.importLabel('value', 'report_engine', context)}</span>
+          <span />
+        </div>
+        <div className={'re-criteria-body'}>
+          {criteria.map(field =>
+            <div className={`re-criteria-row ${field.parent ? 're-criteria-row--parent' : ''}`} key={field.field_name}>
+              <div className={'re-criteria-field'}>
+                <div className={'re-criteria-field-top'}>
+                  <span className={'re-field-name'} title={field.field_name}>{field.field_label}</span>
+                  {field.field_type && <span className={`re-type-badge ${typeBadgeClass(field.field_type)}`}>{field.field_type}</span>}
+                </div>
+                {field.table_name && <span className={'re-field-label'}>{field.table_name}</span>}
+              </div>
+              <select className={'re-select'} data-field={field.field_name} id={`re-operator-${field.field_name}`}
+                value={field.operator} onChange={(e) => onChange(e, 'operator')}>
+                {operatorOptions(field).map(option =>
+                  <option key={option.value} value={option.value}>
+                    {context.intl.formatMessage({ id: option.id, defaultMessage: option.id })}
+                  </option>
+                )}
+              </select>
+              {renderValueControl(field)}
+              <button className={'re-row-remove'} type={'button'}
+                title={labelsManager.importLabel('remove_field', 'report_engine', context)}
+                onClick={() => removeCriterion(field)}>{icons.close}</button>
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className={'report-engine-mid-content-btn-holder'}>
-        <div class='report-engine-checkbox'>
+      <div className={'re-actionbar'}>
+        <div className={'re-aggregates'}>
+          <span className={'re-aggregates-label'}>{labelsManager.importLabel('aggregate_functions', 'report_engine', context)}</span>
           <Form
             id='functions'
             key='functions'
@@ -253,7 +248,10 @@ const MainContent = (props, context) => {
             <></>
           </Form>
         </div>
-        <button className={'btn-success btn_save_form report-engine-btn-width'} onClick={() => getData()}>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-generate-report', defaultMessage: 'perun.plugin.report-engine-generate-report' })}</button>
+        <button className={'re-primary-btn'} onClick={() => getData()}>
+          {icons.download}
+          <span>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-generate-report', defaultMessage: 'perun.plugin.report-engine-generate-report' })}</span>
+        </button>
       </div>
 
     </>

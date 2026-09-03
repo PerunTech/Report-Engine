@@ -7,12 +7,15 @@ import {
   Loading
 } from "perun-core";
 import { icons } from '../assets/svgHolder';
+import { typeBadgeClass } from '../assets/fieldTypes';
 const { alertUser } = elements
 const { useState, useEffect } = React;
 import { labelsManager } from "../assets/LabelsExport"
 const SideMenuAnalytics = (props, context) => {
   const [tables, setTables] = useState([])
   const [loading, setLoading] = useState(false)
+  const [inputArr, setinputArr] = useState([])
+  const [input, setInput] = useState('')
 
   useEffect(() => {
     setLoading(true)
@@ -33,12 +36,22 @@ const SideMenuAnalytics = (props, context) => {
   }, [])
 
   const generateSideMenuAnalytics = () => {
-    return tables.map(table => <div style={{ 'cursor': 'pointer' }} className={`'report-engine-table-container' ${table.opened ? 'report-engine-opened' : 'report-engine-closed'} ${table['SVAROG_TABLES.PARENT_ID'] === 0 ? 'report-engine-parent' : 'report-engine-notparent'}`} onClick={() => handleClick(table)} key={table['SVAROG_TABLES.OBJECT_ID']} id={table['SVAROG_TABLES.OBJECT_ID']}>
-      <div className={'report-engine-table-name'}><p>{table['OBJECT_NAME']}</p> <span>{table.opened ? icons.minus : icons.plus}</span></div>
-      {table.opened && <div className={'report-engine-field-container'}>
-        {generateSideMenuAnalyticsChild(table)}
-      </div>}
-    </div>)
+    const visibleTables = input ? inputArr : tables
+    if (input && inputArr.length === 0) {
+      return <div className={'re-rail-empty'}>{labelsManager.importLabel('no_tables_found', 'report_engine', context)}</div>
+    }
+    return visibleTables.map(table => (
+      <div className={`re-table ${table.opened ? 're-table--open' : ''}`} key={table['OBJECT_ID']} id={table['OBJECT_ID']}>
+        <button type={'button'} className={'re-table-head'} onClick={() => handleClick(table)}>
+          <span className={'re-chevron'}>{icons.chevron}</span>
+          <span className={'re-table-name'} title={table['OBJECT_NAME']}>{table['OBJECT_NAME']}</span>
+          {table.childList && <span className={'re-count'}>{table.childList.length}</span>}
+        </button>
+        {table.opened && <div className={'re-field-list'}>
+          {generateSideMenuAnalyticsChild(table)}
+        </div>}
+      </div>
+    ))
   }
 
   const handleClick = (table) => {
@@ -75,18 +88,46 @@ const SideMenuAnalytics = (props, context) => {
 
   const generateSideMenuAnalyticsChild = (table) => {
     let tableobj = table
-    return table.childList.map((field) => <div onClick={(e) => props.handleFieldClick(e, field, tableobj)} key={field.key}>
+    if (!table.childList || table.childList.length === 0) {
+      return <div className={'re-field-empty'}>{labelsManager.importLabel('no_fields_found', 'report_engine', context)}</div>
+    }
+    return table.childList.map((field) => {
+      const isSelected = props.selectedKeys.indexOf(field['KEY']) !== -1
+      return (
+        <div className={`re-field-row ${isSelected ? 're-field-row--selected' : ''}`}
+          onClick={(e) => props.handleFieldClick(e, field, tableobj)} key={field['KEY']}>
+          <span className={'re-field-info'}>
+            <span className={'re-field-name'} title={field['FIELD_NAME']}>{field['FIELD_NAME']}</span>
+            {field.name && field.name !== field['FIELD_NAME'] && <span className={'re-field-label'}>{field.name}</span>}
+          </span>
+          {field['FIELD_TYPE'] && <span className={`re-type-badge ${typeBadgeClass(field['FIELD_TYPE'])}`}>{field['FIELD_TYPE']}</span>}
+          <span className={'re-field-action'}>{isSelected ? icons.check : icons.plus}</span>
+        </div>
+      )
+    })
+  }
 
-      <p>{field['FIELD_NAME']}</p>
-    </div>
-
-    )
+  const onChange = (e) => {
+    let tempArr = []
+    setInput(e.target.value.toUpperCase())
+    tables.forEach(element => {
+      if (element['OBJECT_NAME'].toUpperCase().startsWith(e.target.value.toUpperCase())) {
+        tempArr.push(element)
+      }
+    })
+    setinputArr(tempArr)
   }
 
   return (
     <>
       {loading && <Loading />}
-      {generateSideMenuAnalytics()}
+      <div className={'re-rail-search'}>
+        <span className={'re-rail-search-icon'}>{icons.search}</span>
+        <input className={'re-rail-search-input'} placeholder={labelsManager.importLabel('enter_search_value', 'report_engine', context)} onChange={(e) => { onChange(e) }} type={'text'} />
+      </div>
+      <div className={'re-rail-body'}>
+        {generateSideMenuAnalytics()}
+      </div>
     </>
   );
 };

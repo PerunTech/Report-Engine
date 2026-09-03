@@ -73,40 +73,81 @@ const ReportEngine = (props, context) => {
     }
   }
   //used to clean up after table switch and toggle which table is shown
-  const toggleFunction = () => {
+  const selectSource = (showSystem) => {
+    if (showSystem === system) {
+      return
+    }
     //toggle tables
-    setShowSystem(!system)
+    setShowSystem(showSystem)
     //clean up
+    clearSelection()
+  }
+
+  const clearSelection = () => {
     setParentActive(false)
     setSelectedFields([])
     setParentName('')
   }
 
-  const handleFieldClickAnalytics = (e, field) => {
+  const handleFieldClickAnalytics = (e, field, table) => {
     let key = 'key'
     if (!system) {
       key = 'KEY'
     }
     e.stopPropagation()
+    //carry the source table so the criteria row can show where the field comes from
+    if (table && !field['TABLE_NAME']) {
+      field['TABLE_NAME'] = table['OBJECT_NAME']
+    }
     let tempArr = [...selectedFields]
     tempArr.push(field)
     let uniqueObjArray = [...new Map(tempArr.map((item) => [item[`${key}`], item])).values()];
     setSelectedFields(uniqueObjArray)
   }
-  return (
-    <div className={'report-engine-main-container'}>
-      <div className={'report-engine-side-menu-container'}>
-        <button onClick={() => { history.goBack() }} className={'report-engine-btn-back'}><span>{icons.back}{context.intl.formatMessage({ id: 'perun.plugin.report-engine-back', defaultMessage: 'perun.plugin.report-engine-back' })}</span></button>
-        <div className={'report-engine-table-toggle-button'} onClick={() => toggleFunction()}>
-          <p>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-show', defaultMessage: 'perun.plugin.report-engine-show' })} {system ? context.intl.formatMessage({ id: 'perun.plugin.report-engine-analytics', defaultMessage: 'perun.plugin.report-engine-analytics' }) : context.intl.formatMessage({ id: 'perun.plugin.report-engine-system', defaultMessage: 'perun.plugin.report-engine-system' })}</p>
-        </div>
-        {system && <SideMenu handleFieldClick={handleFieldClick} />}
-        {!system && <SideMenuAnalytics handleFieldClick={handleFieldClickAnalytics} />}
-      </div>
 
-      {selectedFields.length > 0 && <div className={'report-engine-main-content-container'}>
-        <MainContent isAnalytics={!system} selectedFields={selectedFields} removeFileClick={removeFileClick} />
-      </div>}
+  const selectedKeys = selectedFields.map(field => system ? field['key'] : field['KEY'])
+
+  return (
+    <div className={'re-root'}>
+      <aside className={'re-rail'}>
+        <div className={'re-rail-header'}>
+          <button onClick={() => { history.goBack() }} className={'re-back-btn'}>
+            {icons.back}
+            <span>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-back', defaultMessage: 'perun.plugin.report-engine-back' })}</span>
+          </button>
+          <span className={'re-rail-title'}>{labelsManager.importLabel('tables', 'report_engine', context)}</span>
+        </div>
+
+        <div className={'re-tabs'}>
+          <button className={`re-tab ${system ? 're-tab--active' : ''}`} onClick={() => selectSource(true)}>
+            {context.intl.formatMessage({ id: 'perun.plugin.report-engine-system', defaultMessage: 'perun.plugin.report-engine-system' })}
+          </button>
+          <button className={`re-tab ${!system ? 're-tab--active' : ''}`} onClick={() => selectSource(false)}>
+            {context.intl.formatMessage({ id: 'perun.plugin.report-engine-analytics', defaultMessage: 'perun.plugin.report-engine-analytics' })}
+          </button>
+        </div>
+
+        {system && <SideMenu handleFieldClick={handleFieldClick} selectedKeys={selectedKeys} lockedParent={parentName} />}
+        {!system && <SideMenuAnalytics handleFieldClick={handleFieldClickAnalytics} selectedKeys={selectedKeys} />}
+      </aside>
+
+      <main className={'re-canvas'}>
+        <div className={'re-canvas-header'}>
+          <h2 className={'re-canvas-title'}>{labelsManager.importLabel('report_criteria', 'report_engine', context)}</h2>
+          <span className={'re-count re-count--accent'}>{selectedFields.length}</span>
+          {parentName && <span className={'re-scope-chip'} title={parentName}>{parentName}</span>}
+          {selectedFields.length > 0 && <button className={'re-ghost-btn'} onClick={() => clearSelection()}>
+            {labelsManager.importLabel('clear_all', 'report_engine', context)}
+          </button>}
+        </div>
+
+        {selectedFields.length > 0
+          ? <MainContent isAnalytics={!system} selectedFields={selectedFields} removeFileClick={removeFileClick} />
+          : <div className={'re-placeholder'}>
+            <span className={'re-placeholder-title'}>{labelsManager.importLabel('no_fields_selected', 'report_engine', context)}</span>
+            <span className={'re-placeholder-hint'}>{labelsManager.importLabel('no_fields_selected_hint', 'report_engine', context)}</span>
+          </div>}
+      </main>
     </div>
   )
 }
