@@ -8,7 +8,7 @@ import {
 } from "perun-core";
 import { icons } from '../assets/svgHolder';
 import { typeBadgeClass } from '../assets/fieldTypes';
-const { alertUser } = elements
+const { alertUserResponse } = elements
 const { useState, useEffect } = React;
 import { labelsManager } from "../assets/LabelsExport"
 const SideMenuAnalytics = (props, context) => {
@@ -28,9 +28,7 @@ const SideMenuAnalytics = (props, context) => {
       setTables(res.data)
     }).catch(err => {
       console.log(err.response)
-      const title = err.response?.data?.title || labelsManager.importLabel('error_occurred', 'report_engine', context)
-      const message = err.response?.data?.message || err.response?.data
-      alertUser(true, 'error', title, message)
+      alertUserResponse({ response: err })
       setLoading(false)
     })
   }, [])
@@ -42,7 +40,7 @@ const SideMenuAnalytics = (props, context) => {
     }
     return visibleTables.map(table => (
       <div className={`re-table ${table.opened ? 're-table--open' : ''}`} key={table['OBJECT_ID']} id={table['OBJECT_ID']}>
-        <button type={'button'} className={'re-table-head'} onClick={() => handleClick(table)}>
+        <button type={'button'} id={`re-table-head-${table['OBJECT_ID']}`} className={'re-table-head'} onClick={() => handleClick(table)}>
           <span className={'re-chevron'}>{icons.chevron}</span>
           <span className={'re-table-name'} title={table['OBJECT_NAME']}>{table['OBJECT_NAME']}</span>
           {table.childList && <span className={'re-count'}>{table.childList.length}</span>}
@@ -74,9 +72,7 @@ const SideMenuAnalytics = (props, context) => {
             setLoading(false)
           }).catch(err => {
             console.log(err.response)
-            const title = err.response?.data?.title || labelsManager.importLabel('error_occurred', 'report_engine', context)
-            const message = err.response?.data?.message || err.response?.data
-            alertUser(true, 'error', title, message)
+            alertUserResponse({ response: err })
             setLoading(false)
           })
         }
@@ -94,7 +90,7 @@ const SideMenuAnalytics = (props, context) => {
     return table.childList.map((field) => {
       const isSelected = props.selectedKeys.indexOf(field['KEY']) !== -1
       return (
-        <div className={`re-field-row ${isSelected ? 're-field-row--selected' : ''}`}
+        <div className={`re-field-row ${isSelected ? 're-field-row--selected' : ''}`} id={`re-field-${field['KEY']}`}
           onClick={(e) => props.handleFieldClick(e, field, tableobj)} key={field['KEY']}>
           <span className={'re-field-info'}>
             <span className={'re-field-name'} title={field['FIELD_NAME']}>{field['FIELD_NAME']}</span>
@@ -123,7 +119,7 @@ const SideMenuAnalytics = (props, context) => {
       {loading && <Loading />}
       <div className={'re-rail-search'}>
         <span className={'re-rail-search-icon'}>{icons.search}</span>
-        <input className={'re-rail-search-input'} placeholder={labelsManager.importLabel('enter_search_value', 'report_engine', context)} onChange={(e) => { onChange(e) }} type={'text'} />
+        <input id={'re-analytics-search'} className={'re-rail-search-input'} placeholder={labelsManager.importLabel('enter_search_value', 'report_engine', context)} onChange={(e) => { onChange(e) }} type={'text'} />
       </div>
       <div className={'re-rail-body'}>
         {generateSideMenuAnalytics()}

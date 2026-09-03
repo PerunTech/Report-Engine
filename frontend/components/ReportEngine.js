@@ -6,7 +6,7 @@ import SideMenu from './SideMenu';
 import SideMenuAnalytics from './SideMenuAnalytics';
 import { icons } from '../assets/svgHolder';
 import { labelsManager } from "../assets/LabelsExport"
-const { alertUser } = elements
+const { alertUserV2 } = elements
 const history = createHashHistory();
 const { useState } = React
 const ReportEngine = (props, context) => {
@@ -28,7 +28,11 @@ const ReportEngine = (props, context) => {
     e.stopPropagation()
     let tempArr = [...selectedFields]
     if (table['SVAROG_TABLES.PARENT_ID'] === 0 && table['SVAROG_TABLES.TABLE_NAME'] !== parentName && parentName) {
-      alertUser(true, 'info', labelsManager.importLabel('notification_title', 'report_engine', context), `${labelsManager.importLabel('already_selected_parent', 'report_engine', context)}. (${parentName})`)
+      alertUserV2({
+        type: 'info',
+        title: labelsManager.importLabel('notification_title', 'report_engine', context),
+        message: `${labelsManager.importLabel('already_selected_parent', 'report_engine', context)}. (${parentName})`
+      })
     } else if (table['SVAROG_TABLES.PARENT_ID'] === 0 && !parentName) {
       tempArr.push(innerField)
 
@@ -111,7 +115,7 @@ const ReportEngine = (props, context) => {
     <div className={'re-root'}>
       <aside className={'re-rail'}>
         <div className={'re-rail-header'}>
-          <button onClick={() => { history.goBack() }} className={'re-back-btn'}>
+          <button id={'re-btn-back'} onClick={() => { history.goBack() }} className={'re-back-btn'}>
             {icons.back}
             <span>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-back', defaultMessage: 'perun.plugin.report-engine-back' })}</span>
           </button>
@@ -119,10 +123,10 @@ const ReportEngine = (props, context) => {
         </div>
 
         <div className={'re-tabs'}>
-          <button className={`re-tab ${system ? 're-tab--active' : ''}`} onClick={() => selectSource(true)}>
+          <button id={'re-tab-system'} className={`re-tab ${system ? 're-tab--active' : ''}`} onClick={() => selectSource(true)}>
             {context.intl.formatMessage({ id: 'perun.plugin.report-engine-system', defaultMessage: 'perun.plugin.report-engine-system' })}
           </button>
-          <button className={`re-tab ${!system ? 're-tab--active' : ''}`} onClick={() => selectSource(false)}>
+          <button id={'re-tab-analytics'} className={`re-tab ${!system ? 're-tab--active' : ''}`} onClick={() => selectSource(false)}>
             {context.intl.formatMessage({ id: 'perun.plugin.report-engine-analytics', defaultMessage: 'perun.plugin.report-engine-analytics' })}
           </button>
         </div>
@@ -136,7 +140,7 @@ const ReportEngine = (props, context) => {
           <h2 className={'re-canvas-title'}>{labelsManager.importLabel('report_criteria', 'report_engine', context)}</h2>
           <span className={'re-count re-count--accent'}>{selectedFields.length}</span>
           {parentName && <span className={'re-scope-chip'} title={parentName}>{parentName}</span>}
-          {selectedFields.length > 0 && <button className={'re-ghost-btn'} onClick={() => clearSelection()}>
+          {selectedFields.length > 0 && <button id={'re-btn-clear-all'} className={'re-ghost-btn'} onClick={() => clearSelection()}>
             {labelsManager.importLabel('clear_all', 'report_engine', context)}
           </button>}
         </div>

@@ -20,7 +20,7 @@ const MainContent = (props, context) => {
   const [criteria, setCriteria] = useState([])
   const [formData, setFormData] = useState(undefined)
   const [loading, setLoading] = useState(false)
-  const { alertUser } = elements
+  const { alertUserResponse } = elements
   useEffect(() => {
     syncCriteria()
   }, [props.selectedFields])
@@ -162,7 +162,7 @@ const MainContent = (props, context) => {
         const text = await err.response.data.text();
         // Parse the text to JSON
         const jsonResponse = JSON.parse(text);
-        alertUser(true, 'error', jsonResponse?.title || '', jsonResponse?.message || '');
+        alertUserResponse({ response: jsonResponse });
       }
     })
   }
@@ -225,7 +225,7 @@ const MainContent = (props, context) => {
                 )}
               </select>
               {renderValueControl(field)}
-              <button className={'re-row-remove'} type={'button'}
+              <button className={'re-row-remove'} type={'button'} id={`re-btn-remove-${field.field_name}`}
                 title={labelsManager.importLabel('remove_field', 'report_engine', context)}
                 onClick={() => removeCriterion(field)}>{icons.close}</button>
             </div>
@@ -248,7 +248,7 @@ const MainContent = (props, context) => {
             <></>
           </Form>
         </div>
-        <button className={'re-primary-btn'} onClick={() => getData()}>
+        <button id={'re-btn-generate-report'} className={'re-primary-btn'} onClick={() => getData()}>
           {icons.download}
           <span>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-generate-report', defaultMessage: 'perun.plugin.report-engine-generate-report' })}</span>
         </button>

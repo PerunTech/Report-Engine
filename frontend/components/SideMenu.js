@@ -10,7 +10,7 @@ import { icons } from '../assets/svgHolder';
 import { typeBadgeClass } from '../assets/fieldTypes';
 import { labelsManager } from "../assets/LabelsExport"
 const { useState, useEffect } = React;
-const { alertUser } = elements
+const { alertUserResponse } = elements
 const SideMenu = (props, context) => {
   const [tables, setTables] = useState([])
   const [loading, setLoading] = useState(false)
@@ -35,9 +35,7 @@ const SideMenu = (props, context) => {
       setTables(temp1.concat(temp2))
     }).catch(err => {
       console.log(err.response)
-      const title = err.response?.data?.title || labelsManager.importLabel('error_occurred', 'report_engine', context)
-      const message = err.response?.data?.message || err.response?.data
-      alertUser(true, 'error', title, message)
+      alertUserResponse({ response: err })
       setLoading(false)
     })
   }, [])
@@ -57,7 +55,7 @@ const SideMenu = (props, context) => {
     return (
       <div className={`re-table ${table.opened ? 're-table--open' : ''} ${isLocked ? 're-table--locked' : ''}`}
         key={table['SVAROG_TABLES.OBJECT_ID']} id={table['SVAROG_TABLES.OBJECT_ID']}>
-        <button type={'button'} className={'re-table-head'} onClick={() => handleClick(table)}>
+        <button type={'button'} id={`re-table-head-${table['SVAROG_TABLES.OBJECT_ID']}`} className={'re-table-head'} onClick={() => handleClick(table)}>
           <span className={'re-chevron'}>{icons.chevron}</span>
           <span className={'re-table-name'} title={table['SVAROG_TABLES.TABLE_NAME']}>{table['SVAROG_TABLES.TABLE_NAME']}</span>
           {isParent && <span className={'re-badge re-badge--parent'}>{labelsManager.importLabel('parent_table', 'report_engine', context)}</span>}
@@ -90,9 +88,7 @@ const SideMenu = (props, context) => {
             setLoading(false)
           }).catch(err => {
             console.log(err.response)
-            const title = err.response?.data?.title || labelsManager.importLabel('error_occurred', 'report_engine', context)
-            const message = err.response?.data?.message || err.response?.data
-            alertUser(true, 'error', title, message)
+            alertUserResponse({ response: err })
             setLoading(false)
           })
         }
@@ -110,7 +106,7 @@ const SideMenu = (props, context) => {
     return table.childList.map((field) => {
       const isSelected = props.selectedKeys.indexOf(field.key) !== -1
       return (
-        <div className={`re-field-row ${isSelected ? 're-field-row--selected' : ''}`}
+        <div className={`re-field-row ${isSelected ? 're-field-row--selected' : ''}`} id={`re-field-${field.key}`}
           onClick={(e) => props.handleFieldClick(e, field, tableobj)} key={field.key}>
           <span className={'re-field-info'}>
             <span className={'re-field-name'} title={field['FIELD_NAME']}>{field['FIELD_NAME']}</span>
@@ -139,7 +135,7 @@ const SideMenu = (props, context) => {
       {loading && <Loading />}
       <div className={'re-rail-search'}>
         <span className={'re-rail-search-icon'}>{icons.search}</span>
-        <input className={'re-rail-search-input'} placeholder={labelsManager.importLabel('enter_search_value', 'report_engine', context)} onChange={(e) => { onChange(e) }} type={'text'} />
+        <input id={'re-system-search'} className={'re-rail-search-input'} placeholder={labelsManager.importLabel('enter_search_value', 'report_engine', context)} onChange={(e) => { onChange(e) }} type={'text'} />
       </div>
       <div className={'re-rail-body'}>
         {generateSideMenu()}
