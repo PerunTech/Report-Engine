@@ -15,7 +15,7 @@ const Mainholder = (props, context) => {
 
 
   const assignComponentToRoute = (props) => {
-    const { match, history } = props;
+    const { match } = props;
     const pathName = match.path.split("/")[2];
     let component;
     switch (pathName) {

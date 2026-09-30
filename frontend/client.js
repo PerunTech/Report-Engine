@@ -1,12 +1,13 @@
-/**
- * When running a dev environment, you need to register with Core.
- * Import your plugin assembly, i.e. whatever you exported from your entry file, 
- * and call the pluginManager with:
- *  - The name of your plugin, by convention the name specified in package.json
- *  - Your plugin implementation, assembled as an object.
- */
 import pkg from '../package.json'
 import { pluginManager } from 'perun-core'
 import * as plugin from './index'
+
+// The shell reaches a plugin two different ways and this file has to satisfy
+// both. ModuleMenu asks pluginManager, which skips anything already registered,
+// so registering here is what keeps it from fetching a second copy. Router
+// instead reads `window[<context>]` off the script it loaded, so the bundle has
+// to expose the same routes as a value -- production's entry (index.js) does
+// that by being the plugin, and this entry does it by re-exporting one.
+export * from './index'
 
 pluginManager.registerPlugin(pkg.name, plugin)
