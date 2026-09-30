@@ -16,14 +16,10 @@ const ReportEngine = (props, context) => {
   const [system, setShowSystem] = useState(true)
   const handleFieldClick = (e, field, table) => {
     let innerField = field
-    if (table['SVAROG_TABLES.PARENT_ID']) {
-
-    } else {
-      if (!parentActive) {
-        setParentName(table['SVAROG_TABLES.TABLE_NAME'])
-        setParentActive(true)
-        innerField.parent = true
-      }
+    if (!table['SVAROG_TABLES.PARENT_ID'] && !parentActive) {
+      setParentName(table['SVAROG_TABLES.TABLE_NAME'])
+      setParentActive(true)
+      innerField.parent = true
     }
     e.stopPropagation()
     let tempArr = [...selectedFields]
