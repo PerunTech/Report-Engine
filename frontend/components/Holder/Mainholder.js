@@ -1,15 +1,16 @@
-import { React, PropTypes } from "perun-core";
+import { React, useIntl } from "perun-core";
 const { useState, useEffect } = React;
 import ReportEngine from '../ReportEngine';
 import { labelsManager } from "../../assets/LabelsExport";
-const Mainholder = (props, context) => {
+const Mainholder = (props) => {
+  const intl = useIntl();
   const [component, setComponent] = useState(undefined);
 
   useEffect(() => {
     assignComponentToRoute(props);
     if (document.getElementById("identificationScreen")) {
       document.getElementById("identificationScreen").className = "identificationScreen";
-      document.getElementById("identificationScreen").innerText = labelsManager.importLabel('report-engine', 'plugin', context);
+      document.getElementById("identificationScreen").innerText = labelsManager.importLabel('report-engine', 'plugin', intl);
     }
   }, []);
 
@@ -34,9 +35,5 @@ const Mainholder = (props, context) => {
     </>
   );
 };
-
-Mainholder.contextTypes = {
-  intl: PropTypes.object.isRequired
-}
 
 export default Mainholder;

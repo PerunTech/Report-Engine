@@ -3,7 +3,7 @@ import {
   connect,
   axios,
   Loading,
-  PropTypes,
+  useIntl,
   elements,
   Form,
   validator
@@ -15,7 +15,8 @@ import { labelsManager } from "../../assets/LabelsExport";
 import { schema, uiSchema } from "../AggregateFormSchema";
 const { useEffect, useState } = React
 let globalArr = []
-const MainContent = (props, context) => {
+const MainContent = (props) => {
+  const intl = useIntl()
   //globalArr stays the source of truth for the criteria; criteria is its render mirror
   const [criteria, setCriteria] = useState([])
   const [formData, setFormData] = useState(undefined)
@@ -191,7 +192,7 @@ const MainContent = (props, context) => {
     return (
       <input className={'re-input'} data-field={field.field_name} id={`re-value-${field.field_name}`}
         type={fieldType(field)} value={field.value !== undefined ? field.value : ''}
-        placeholder={labelsManager.importLabel('value', 'report_engine', context)}
+        placeholder={labelsManager.importLabel('value', 'report_engine', intl)}
         onChange={(e) => onChange(e, 'value')} />
     )
   }
@@ -201,9 +202,9 @@ const MainContent = (props, context) => {
       {loading && <Loading />}
       <div className={'re-criteria'}>
         <div className={'re-criteria-head'}>
-          <span>{labelsManager.importLabel('field', 'report_engine', context)}</span>
-          <span>{labelsManager.importLabel('operator', 'report_engine', context)}</span>
-          <span>{labelsManager.importLabel('value', 'report_engine', context)}</span>
+          <span>{labelsManager.importLabel('field', 'report_engine', intl)}</span>
+          <span>{labelsManager.importLabel('operator', 'report_engine', intl)}</span>
+          <span>{labelsManager.importLabel('value', 'report_engine', intl)}</span>
           <span />
         </div>
         <div className={'re-criteria-body'}>
@@ -220,13 +221,13 @@ const MainContent = (props, context) => {
                 value={field.operator} onChange={(e) => onChange(e, 'operator')}>
                 {operatorOptions(field).map(option =>
                   <option key={option.value} value={option.value}>
-                    {context.intl.formatMessage({ id: option.id, defaultMessage: option.id })}
+                    {intl.formatMessage({ id: option.id, defaultMessage: option.id })}
                   </option>
                 )}
               </select>
               {renderValueControl(field)}
               <button className={'re-row-remove'} type={'button'} id={`re-btn-remove-${field.field_name}`}
-                title={labelsManager.importLabel('remove_field', 'report_engine', context)}
+                title={labelsManager.importLabel('remove_field', 'report_engine', intl)}
                 onClick={() => removeCriterion(field)}>{icons.close}</button>
             </div>
           )}
@@ -235,7 +236,7 @@ const MainContent = (props, context) => {
 
       <div className={'re-actionbar'}>
         <div className={'re-aggregates'}>
-          <span className={'re-aggregates-label'}>{labelsManager.importLabel('aggregate_functions', 'report_engine', context)}</span>
+          <span className={'re-aggregates-label'}>{labelsManager.importLabel('aggregate_functions', 'report_engine', intl)}</span>
           <Form
             id='functions'
             key='functions'
@@ -250,7 +251,7 @@ const MainContent = (props, context) => {
         </div>
         <button id={'re-btn-generate-report'} className={'re-primary-btn'} onClick={() => getData()}>
           {icons.download}
-          <span>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-generate-report', defaultMessage: 'perun.plugin.report-engine-generate-report' })}</span>
+          <span>{intl.formatMessage({ id: 'perun.plugin.report-engine-generate-report', defaultMessage: 'perun.plugin.report-engine-generate-report' })}</span>
         </button>
       </div>
 
@@ -260,7 +261,4 @@ const MainContent = (props, context) => {
 const mapStateToProps = (state) => ({
   svSession: state.security.svSession,
 });
-MainContent.contextTypes = {
-  intl: PropTypes.object.isRequired
-}
 export default connect(mapStateToProps)(MainContent);

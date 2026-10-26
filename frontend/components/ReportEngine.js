@@ -1,5 +1,5 @@
 import {
-  React, createHashHistory, elements, PropTypes
+  React, createHashHistory, elements, useIntl
 } from "perun-core";
 import MainContent from './MainContent/MainContent';
 import SideMenu from './SideMenu';
@@ -9,7 +9,8 @@ import { labelsManager } from "../assets/LabelsExport"
 const { alertUserV2 } = elements
 const history = createHashHistory();
 const { useState } = React
-const ReportEngine = (props, context) => {
+const ReportEngine = () => {
+  const intl = useIntl()
   const [selectedFields, setSelectedFields] = useState([])
   const [parentActive, setParentActive] = useState(false)
   const [parentName, setParentName] = useState('')
@@ -26,8 +27,8 @@ const ReportEngine = (props, context) => {
     if (table['SVAROG_TABLES.PARENT_ID'] === 0 && table['SVAROG_TABLES.TABLE_NAME'] !== parentName && parentName) {
       alertUserV2({
         type: 'info',
-        title: labelsManager.importLabel('notification_title', 'report_engine', context),
-        message: `${labelsManager.importLabel('already_selected_parent', 'report_engine', context)}. (${parentName})`
+        title: labelsManager.importLabel('notification_title', 'report_engine', intl),
+        message: `${labelsManager.importLabel('already_selected_parent', 'report_engine', intl)}. (${parentName})`
       })
     } else if (table['SVAROG_TABLES.PARENT_ID'] === 0 && !parentName) {
       tempArr.push(innerField)
@@ -113,17 +114,17 @@ const ReportEngine = (props, context) => {
         <div className={'re-rail-header'}>
           <button id={'re-btn-back'} onClick={() => { history.goBack() }} className={'re-back-btn'}>
             {icons.back}
-            <span>{context.intl.formatMessage({ id: 'perun.plugin.report-engine-back', defaultMessage: 'perun.plugin.report-engine-back' })}</span>
+            <span>{intl.formatMessage({ id: 'perun.plugin.report-engine-back', defaultMessage: 'perun.plugin.report-engine-back' })}</span>
           </button>
-          <span className={'re-rail-title'}>{labelsManager.importLabel('tables', 'report_engine', context)}</span>
+          <span className={'re-rail-title'}>{labelsManager.importLabel('tables', 'report_engine', intl)}</span>
         </div>
 
         <div className={'re-tabs'}>
           <button id={'re-tab-system'} className={`re-tab ${system ? 're-tab--active' : ''}`} onClick={() => selectSource(true)}>
-            {context.intl.formatMessage({ id: 'perun.plugin.report-engine-system', defaultMessage: 'perun.plugin.report-engine-system' })}
+            {intl.formatMessage({ id: 'perun.plugin.report-engine-system', defaultMessage: 'perun.plugin.report-engine-system' })}
           </button>
           <button id={'re-tab-analytics'} className={`re-tab ${!system ? 're-tab--active' : ''}`} onClick={() => selectSource(false)}>
-            {context.intl.formatMessage({ id: 'perun.plugin.report-engine-analytics', defaultMessage: 'perun.plugin.report-engine-analytics' })}
+            {intl.formatMessage({ id: 'perun.plugin.report-engine-analytics', defaultMessage: 'perun.plugin.report-engine-analytics' })}
           </button>
         </div>
 
@@ -133,26 +134,23 @@ const ReportEngine = (props, context) => {
 
       <main className={'re-canvas'}>
         <div className={'re-canvas-header'}>
-          <h2 className={'re-canvas-title'}>{labelsManager.importLabel('report_criteria', 'report_engine', context)}</h2>
+          <h2 className={'re-canvas-title'}>{labelsManager.importLabel('report_criteria', 'report_engine', intl)}</h2>
           <span className={'re-count re-count--accent'}>{selectedFields.length}</span>
           {parentName && <span className={'re-scope-chip'} title={parentName}>{parentName}</span>}
           {selectedFields.length > 0 && <button id={'re-btn-clear-all'} className={'re-ghost-btn'} onClick={() => clearSelection()}>
-            {labelsManager.importLabel('clear_all', 'report_engine', context)}
+            {labelsManager.importLabel('clear_all', 'report_engine', intl)}
           </button>}
         </div>
 
         {selectedFields.length > 0
           ? <MainContent isAnalytics={!system} selectedFields={selectedFields} removeFileClick={removeFileClick} />
           : <div className={'re-placeholder'}>
-            <span className={'re-placeholder-title'}>{labelsManager.importLabel('no_fields_selected', 'report_engine', context)}</span>
-            <span className={'re-placeholder-hint'}>{labelsManager.importLabel('no_fields_selected_hint', 'report_engine', context)}</span>
+            <span className={'re-placeholder-title'}>{labelsManager.importLabel('no_fields_selected', 'report_engine', intl)}</span>
+            <span className={'re-placeholder-hint'}>{labelsManager.importLabel('no_fields_selected_hint', 'report_engine', intl)}</span>
           </div>}
       </main>
     </div>
   )
-}
-ReportEngine.contextTypes = {
-  intl: PropTypes.object.isRequired
 }
 
 export default ReportEngine

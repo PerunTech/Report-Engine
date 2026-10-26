@@ -3,7 +3,7 @@ import {
   connect,
   elements,
   axios,
-  PropTypes,
+  useIntl,
   Loading
 } from "perun-core";
 import { icons } from '../assets/svgHolder';
@@ -11,7 +11,8 @@ import { typeBadgeClass } from '../assets/fieldTypes';
 const { alertUserResponse } = elements
 const { useState, useEffect } = React;
 import { labelsManager } from "../assets/LabelsExport"
-const SideMenuAnalytics = (props, context) => {
+const SideMenuAnalytics = (props) => {
+  const intl = useIntl()
   const [tables, setTables] = useState([])
   const [loading, setLoading] = useState(false)
   const [inputArr, setinputArr] = useState([])
@@ -36,7 +37,7 @@ const SideMenuAnalytics = (props, context) => {
   const generateSideMenuAnalytics = () => {
     const visibleTables = input ? inputArr : tables
     if (input && inputArr.length === 0) {
-      return <div className={'re-rail-empty'}>{labelsManager.importLabel('no_tables_found', 'report_engine', context)}</div>
+      return <div className={'re-rail-empty'}>{labelsManager.importLabel('no_tables_found', 'report_engine', intl)}</div>
     }
     return visibleTables.map(table => (
       <div className={`re-table ${table.opened ? 're-table--open' : ''}`} key={table['OBJECT_ID']} id={table['OBJECT_ID']}>
@@ -85,7 +86,7 @@ const SideMenuAnalytics = (props, context) => {
   const generateSideMenuAnalyticsChild = (table) => {
     let tableobj = table
     if (!table.childList || table.childList.length === 0) {
-      return <div className={'re-field-empty'}>{labelsManager.importLabel('no_fields_found', 'report_engine', context)}</div>
+      return <div className={'re-field-empty'}>{labelsManager.importLabel('no_fields_found', 'report_engine', intl)}</div>
     }
     return table.childList.map((field) => {
       const isSelected = props.selectedKeys.indexOf(field['KEY']) !== -1
@@ -119,7 +120,7 @@ const SideMenuAnalytics = (props, context) => {
       {loading && <Loading />}
       <div className={'re-rail-search'}>
         <span className={'re-rail-search-icon'}>{icons.search}</span>
-        <input id={'re-analytics-search'} className={'re-rail-search-input'} placeholder={labelsManager.importLabel('enter_search_value', 'report_engine', context)} onChange={(e) => { onChange(e) }} type={'text'} />
+        <input id={'re-analytics-search'} className={'re-rail-search-input'} placeholder={labelsManager.importLabel('enter_search_value', 'report_engine', intl)} onChange={(e) => { onChange(e) }} type={'text'} />
       </div>
       <div className={'re-rail-body'}>
         {generateSideMenuAnalytics()}
@@ -132,7 +133,4 @@ const mapStateToProps = (state) => ({
   svSession: state.security.svSession,
 });
 
-SideMenuAnalytics.contextTypes = {
-  intl: PropTypes.object.isRequired
-}
 export default connect(mapStateToProps)(SideMenuAnalytics);
