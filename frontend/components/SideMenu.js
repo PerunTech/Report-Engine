@@ -4,14 +4,15 @@ import {
   elements,
   axios,
   Loading,
-  PropTypes
+  useIntl
 } from "perun-core";
 import { icons } from '../assets/svgHolder';
 import { typeBadgeClass } from '../assets/fieldTypes';
 import { labelsManager } from "../assets/LabelsExport"
 const { useState, useEffect } = React;
 const { alertUserResponse } = elements
-const SideMenu = (props, context) => {
+const SideMenu = (props) => {
+  const intl = useIntl()
   const [tables, setTables] = useState([])
   const [loading, setLoading] = useState(false)
   const [inputArr, setinputArr] = useState([])
@@ -43,7 +44,7 @@ const SideMenu = (props, context) => {
   const generateSideMenu = () => {
     const visibleTables = input ? inputArr : tables
     if (input && inputArr.length === 0) {
-      return <div className={'re-rail-empty'}>{labelsManager.importLabel('no_tables_found', 'report_engine', context)}</div>
+      return <div className={'re-rail-empty'}>{labelsManager.importLabel('no_tables_found', 'report_engine', intl)}</div>
     }
     return visibleTables.map(table => generateTable(table))
   }
@@ -58,7 +59,7 @@ const SideMenu = (props, context) => {
         <button type={'button'} id={`re-table-head-${table['SVAROG_TABLES.OBJECT_ID']}`} className={'re-table-head'} onClick={() => handleClick(table)}>
           <span className={'re-chevron'}>{icons.chevron}</span>
           <span className={'re-table-name'} title={table['SVAROG_TABLES.TABLE_NAME']}>{table['SVAROG_TABLES.TABLE_NAME']}</span>
-          {isParent && <span className={'re-badge re-badge--parent'}>{labelsManager.importLabel('parent_table', 'report_engine', context)}</span>}
+          {isParent && <span className={'re-badge re-badge--parent'}>{labelsManager.importLabel('parent_table', 'report_engine', intl)}</span>}
           {table.childList && <span className={'re-count'}>{table.childList.length}</span>}
         </button>
         {table.opened && <div className={'re-field-list'}>
@@ -101,7 +102,7 @@ const SideMenu = (props, context) => {
   const generateSideMenuChild = (table) => {
     let tableobj = table
     if (!table.childList || table.childList.length === 0) {
-      return <div className={'re-field-empty'}>{labelsManager.importLabel('no_fields_found', 'report_engine', context)}</div>
+      return <div className={'re-field-empty'}>{labelsManager.importLabel('no_fields_found', 'report_engine', intl)}</div>
     }
     return table.childList.map((field) => {
       const isSelected = props.selectedKeys.indexOf(field.key) !== -1
@@ -135,7 +136,7 @@ const SideMenu = (props, context) => {
       {loading && <Loading />}
       <div className={'re-rail-search'}>
         <span className={'re-rail-search-icon'}>{icons.search}</span>
-        <input id={'re-system-search'} className={'re-rail-search-input'} placeholder={labelsManager.importLabel('enter_search_value', 'report_engine', context)} onChange={(e) => { onChange(e) }} type={'text'} />
+        <input id={'re-system-search'} className={'re-rail-search-input'} placeholder={labelsManager.importLabel('enter_search_value', 'report_engine', intl)} onChange={(e) => { onChange(e) }} type={'text'} />
       </div>
       <div className={'re-rail-body'}>
         {generateSideMenu()}
@@ -147,8 +148,5 @@ const SideMenu = (props, context) => {
 const mapStateToProps = (state) => ({
   svSession: state.security.svSession,
 });
-SideMenu.contextTypes = {
-  intl: PropTypes.object.isRequired
-}
 
 export default connect(mapStateToProps)(SideMenu);

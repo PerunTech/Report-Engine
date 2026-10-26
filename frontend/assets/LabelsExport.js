@@ -1,18 +1,18 @@
 /**
 * MANDATORY PARAMETERS
 * @param {string} checkLabel - type of label
-* @param {string} context - imported context from component where LabelsExport is used
+* @param {object} intl - the intl object, from useIntl()
 * OPTIONAL PARAMETERS
 * @param {string} moduleNameParam - name of the module where label is used
 */
 
 export const labelsManager = {
-  importLabel (checkLabel, moduleNameParam, context) {
-    if (checkLabel && context) {
+  importLabel (checkLabel, moduleNameParam, intl) {
+    if (checkLabel && intl) {
       if (moduleNameParam) {
-        return context.intl.formatMessage({ id: `perun.${moduleNameParam}.${checkLabel}`, defaultMessage: `perun.${moduleNameParam}.${checkLabel}` })
+        return intl.formatMessage({ id: `perun.${moduleNameParam}.${checkLabel}`, defaultMessage: `perun.${moduleNameParam}.${checkLabel}` })
       } else {
-        return context.intl.formatMessage({ id: `perun.generalLabel.${checkLabel}`, defaultMessage: `perun.generalLabel.${checkLabel}` })
+        return intl.formatMessage({ id: `perun.generalLabel.${checkLabel}`, defaultMessage: `perun.generalLabel.${checkLabel}` })
       }
     } else {
       console.warn('Check your params')
